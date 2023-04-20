@@ -1,4 +1,4 @@
-# Slashdiablo launcher
+# Resurgence launcher
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/doctorwoot420/resurgence-launcher)](https://goreportcard.com/report/github.com/doctorwoot420/resurgence-launcher)
 [![GoDoc](https://godoc.org/github.com/doctorwoot420/resurgence-launcher?status.svg)](https://godoc.org/github.com/doctorwoot420/resurgence-launcher)
@@ -7,12 +7,12 @@
 
 ## About the project
 
-Slashdiablo launcher is a cross platform game launcher for Diablo II and specifically the [Slashdiablo](https://old.reddit.com/r/slashdiablo/) community. It was built to help new players install patches, updating registries and help with other technical issues to lower the barrier of entry into the Slashdiablo community, while also assisting more experienced players with more advanced settings such as HD mods and launching multiple boxes.
+Resurgence launcher is a cross platform game launcher for Diablo II and specifically the [Resurgence](https://old.reddit.com/r/Resurgence/) community. It was built to help new players install patches, updating registries and help with other technical issues to lower the barrier of entry into the Resurgence community, while also assisting more experienced players with more advanced settings such as HD mods and launching multiple boxes.
 
 ## Features
 
 - [x] Patching Diablo II up to 1.13c from previous game versions
-- [x] Applying Slashdiablo patches automatically
+- [x] Applying Resurgence patches automatically
 - [x] Allows for multiple installs of Diablo II with different settings (such as Maphack & HD)
 - [x] Automatically installs and updates Maphack & HD mod
 - [x] Launch multiple Diablo II boxes from multiple installs
@@ -50,7 +50,7 @@ $ brew install qt
 
 Use the [installer](https://download.qt.io/official_releases/qt/5.13/5.13.0/qt-opensource-windows-x86-5.13.0.exe) provided by Qt (Make sure you install the MinGW build of Qt).
 
-#### Building Slashdiablo launcher
+#### Building Resurgence launcher
 
 ```bash
 # Get binding source

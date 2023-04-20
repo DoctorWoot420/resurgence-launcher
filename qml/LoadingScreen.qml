@@ -51,7 +51,7 @@ Rectangle {
                         anchors.bottom: parent.bottom
                         font.pixelSize: 16
                         color: "#736c6a"
-                        text: "CONNECTING TO SLASHDIABLO API..."
+                        text: "CONNECTING TO Resurgence API..."
                     }
                 }
 
@@ -82,7 +82,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: 14
                         color: "#736c6a"
-                        text: "Something went wrong when connecting to the Slashdiablo API"
+                        text: "Something went wrong when connecting to the Resurgence API"
                     }
                 }
 

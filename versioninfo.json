@@ -19,16 +19,16 @@
         "FileSubType": "00"
     },
     "StringFileInfo": {
-        "Comments": "Slashdiablo launcher",
-        "CompanyName": "Slashdiablo",
-        "FileDescription": "Slashdiablo Launcher",
+        "Comments": "Resurgence launcher",
+        "CompanyName": "Resurgence",
+        "FileDescription": "Resurgence Launcher",
         "FileVersion": "v1.1.2.0",
         "InternalName": "resurgence-launcher.exe",
-        "LegalCopyright": "Copyright (c) 2020 Slashdiablo",
+        "LegalCopyright": "Copyright (c) 2020 Resurgence",
         "LegalTrademarks": "",
-        "OriginalFilename": "Slashdiablo.exe",
+        "OriginalFilename": "Resurgence.exe",
         "PrivateBuild": "",
-        "ProductName": "Slashdiablo launcher",
+        "ProductName": "Resurgence launcher",
         "ProductVersion": "v1.1.2.0",
         "SpecialBuild": ""
     },

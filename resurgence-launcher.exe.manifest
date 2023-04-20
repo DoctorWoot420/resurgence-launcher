@@ -2,7 +2,7 @@
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
 	<assemblyIdentity version="9.0.0.0" processorArchitecture="x86" name="resurgence-launcher.exe" type="win64" />
 	<description>
-		Slashdiablo launcher is a Diablo II laucher for the community Slashdiablo
+		Resurgence Resurgence launcher is a Diablo II laucher for the community Resurgence
 	</description>
 	<trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
 		<security>
