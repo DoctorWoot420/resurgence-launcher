@@ -3,8 +3,8 @@ package bridge
 import (
 	"encoding/json"
 
-	"github.com/nokka/slashdiablo-launcher/config"
-	"github.com/nokka/slashdiablo-launcher/log"
+	"github.com/ToddMinerTech/resurgence-launcher/config"
+	"github.com/ToddMinerTech/resurgence-launcher/log"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/gui"
 )

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/nokka/slashdiablo-launcher/clients/slashdiablo"
+	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
 )
 
 // Service is responsible for all things related to the news.
@@ -14,7 +14,7 @@ type Service interface {
 }
 
 type service struct {
-	client    slashdiablo.Client
+	client    resurgence.Client
 	newsModel *Model
 }
 
@@ -27,7 +27,7 @@ type JSONItem struct {
 	Link  string `json:"link"`
 }
 
-// SetNewsItems will fetch the news from the Slashdiablo server.
+// SetNewsItems will fetch the news from the Resurgence server.
 func (s *service) SetNewsItems() error {
 	contents, err := s.client.GetNews()
 	if err != nil {
@@ -73,7 +73,7 @@ func newItem(item JSONItem) *Item {
 
 // NewService returns a service with all the dependencies.
 func NewService(
-	client slashdiablo.Client,
+	client resurgence.Client,
 	newsModel *Model,
 ) Service {
 	return &service{

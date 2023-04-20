@@ -6,8 +6,8 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	"github.com/nokka/slashdiablo-launcher/clients/slashdiablo"
-	"github.com/nokka/slashdiablo-launcher/storage"
+	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
+	"github.com/ToddMinerTech/resurgence-launcher/storage"
 )
 
 // Service is responsible for all things related to configuration.
@@ -35,7 +35,7 @@ type Service interface {
 }
 
 type service struct {
-	slashdiabloClient slashdiablo.Client
+	resurgenceClient resurgence.Client
 	store             storage.Store
 	gameModel         *GameModel
 	mutex             sync.Mutex
@@ -204,9 +204,9 @@ func (s *service) UpdateLaunchDelay(delay int) error {
 	return nil
 }
 
-// GetAvailableMods will get available mods from the Slashdiablo API.
+// GetAvailableMods will get available mods from the Resurgence API.
 func (s *service) GetAvailableMods() (*GameMods, error) {
-	contents, err := s.slashdiabloClient.GetAvailableMods()
+	contents, err := s.resurgenceClient.GetAvailableMods()
 	if err != nil {
 		return nil, err
 	}
@@ -226,12 +226,12 @@ func (s *service) GetAvailableMods() (*GameMods, error) {
 
 // NewService returns a service with all the dependencies.
 func NewService(
-	slashdiabloClient slashdiablo.Client,
+	resurgenceClient resurgence.Client,
 	store storage.Store,
 	gameModel *GameModel,
 ) Service {
 	return &service{
-		slashdiabloClient: slashdiabloClient,
+		resurgenceClient: resurgenceClient,
 		store:             store,
 		gameModel:         gameModel,
 	}

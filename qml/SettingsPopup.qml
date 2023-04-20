@@ -144,7 +144,7 @@ Popup {
                             width: intro.width
 
                             Title {
-                               text: "WELCOME TO SLASHDIABLO LAUNCHER"
+                               text: "WELCOME TO resurgence LAUNCHER"
                                font.pixelSize: 20
                             }
 
@@ -268,7 +268,7 @@ Popup {
                                 }
 
                                 SText {
-                                    text: "The launcher will figure out if you need to patch the games to be up to date with Slashdiablo"
+                                    text: "The launcher will figure out if you need to patch the games to be up to date with Resurgence"
                                     anchors.verticalCenter: parent.verticalCenter
                                     color: "#a3a3a3"
                                 }

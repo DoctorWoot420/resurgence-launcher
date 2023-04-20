@@ -1,4 +1,4 @@
-//go:generate goversioninfo -icon=icon.ico -manifest=slashdiablo-launcher.exe.manifest -64
+//go:generate goversioninfo -icon=icon.ico -manifest=resurgence-launcher.exe.manifest -64
 
 package main
 
@@ -9,15 +9,15 @@ import (
 	"strconv"
 
 	"github.com/nokka/goqmlframeless"
-	"github.com/nokka/slashdiablo-launcher/bridge"
-	ladderClient "github.com/nokka/slashdiablo-launcher/clients/ladder"
-	"github.com/nokka/slashdiablo-launcher/clients/slashdiablo"
-	"github.com/nokka/slashdiablo-launcher/config"
-	"github.com/nokka/slashdiablo-launcher/d2"
-	"github.com/nokka/slashdiablo-launcher/ladder"
-	"github.com/nokka/slashdiablo-launcher/log"
-	"github.com/nokka/slashdiablo-launcher/news"
-	"github.com/nokka/slashdiablo-launcher/storage"
+	"github.com/ToddMinerTech/resurgence-launcher/bridge"
+	ladderClient "github.com/ToddMinerTech/resurgence-launcher/clients/ladder"
+	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
+	"github.com/ToddMinerTech/resurgence-launcher/config"
+	"github.com/ToddMinerTech/resurgence-launcher/d2"
+	"github.com/ToddMinerTech/resurgence-launcher/ladder"
+	"github.com/ToddMinerTech/resurgence-launcher/log"
+	"github.com/ToddMinerTech/resurgence-launcher/news"
+	"github.com/ToddMinerTech/resurgence-launcher/storage"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/quick"
 	"github.com/therecipe/qt/widgets"
@@ -32,7 +32,7 @@ func main() {
 	)
 
 	// Set app context.
-	core.QCoreApplication_SetApplicationName("Slashdiablo launcher")
+	core.QCoreApplication_SetApplicationName("Resurgence launcher")
 	core.QCoreApplication_SetOrganizationName("slashdiablo.net")
 	core.QCoreApplication_SetOrganizationDomain("slashdiablo.net")
 	core.QCoreApplication_SetApplicationVersion("1.1.2")
@@ -94,7 +94,7 @@ func main() {
 	fm := d2.NewFileModel(nil)
 
 	// Setup clients.
-	sc := slashdiablo.NewClient()
+	sc := resurgence.NewClient()
 	lc := ladderClient.NewClient()
 
 	// Setup services.

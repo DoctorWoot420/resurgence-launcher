@@ -3,10 +3,10 @@ package ladder
 import (
 	"errors"
 
-	ladderClient "github.com/nokka/slashdiablo-launcher/clients/ladder"
+	ladderClient "github.com/ToddMinerTech/resurgence-launcher/clients/ladder"
 )
 
-// Service is responsible for all things related to the Slashdiablo ladder.
+// Service is responsible for all things related to the Resurgence ladder.
 type Service interface {
 	SetLadderCharacters(mode string) error
 }
@@ -16,7 +16,7 @@ type service struct {
 	ladderModel *TopLadderModel
 }
 
-// SetLadderCharacters will fetch the ladder from the Slashdiablo API.
+// SetLadderCharacters will fetch the ladder from the Resurgence API.
 func (s *service) SetLadderCharacters(mode string) error {
 	characters, err := s.client.GetLadder(mode)
 	if err != nil {

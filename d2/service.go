@@ -11,13 +11,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nokka/slashdiablo-launcher/clients/slashdiablo"
-	"github.com/nokka/slashdiablo-launcher/config"
-	"github.com/nokka/slashdiablo-launcher/log"
-	"github.com/nokka/slashdiablo-launcher/storage"
+	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
+	"github.com/ToddMinerTech/resurgence-launcher/config"
+	"github.com/ToddMinerTech/resurgence-launcher/log"
+	"github.com/ToddMinerTech/resurgence-launcher/storage"
 )
 
-// Service is responsible for all things related to the Slashdiablo ladder.
+// Service is responsible for all things related to the Resurgence ladder.
 type Service interface {
 	// Exec is responsible for executing the Diablo II game.
 	Exec() error
@@ -37,7 +37,7 @@ type Service interface {
 
 // Service is responsible for all things related to Diablo II.
 type service struct {
-	slashdiabloClient slashdiablo.Client
+	resurgenceClient resurgence.Client
 	configService     config.Service
 	logger            log.Logger
 	gameStates        chan execState
@@ -110,7 +110,7 @@ func (s *service) getAvailableMods() (*config.GameMods, error) {
 	}
 
 	// No cached mods exist, fetch remote mods.
-	contents, err := s.slashdiabloClient.GetAvailableMods()
+	contents, err := s.resurgenceClient.GetAvailableMods()
 	if err != nil {
 		return nil, err
 	}
@@ -377,7 +377,7 @@ func (s *service) Patch(done chan bool) (<-chan float32, <-chan PatchState) {
 				return
 			}
 
-			// Apply the Slashdiablo specific patch.
+			// Apply the Resurgence specific patch.
 			err = s.applySlashPatch(game.Location, state, progress)
 			if err != nil {
 				state <- PatchState{Error: err}
@@ -634,7 +634,7 @@ func (s *service) apply113c(path string, state chan PatchState, progress chan fl
 }
 
 func (s *service) applySlashPatch(path string, state chan PatchState, progress chan float32) error {
-	state <- PatchState{Message: "Checking Slashdiablo patch..."}
+	state <- PatchState{Message: "Checking Resurgence patch..."}
 
 	// Download manifest from patch repository.
 	manifest, err := s.getManifest("current/manifest.json")
@@ -649,7 +649,7 @@ func (s *service) applySlashPatch(path string, state chan PatchState, progress c
 	}
 
 	if len(patchFiles) > 0 {
-		state <- PatchState{Message: fmt.Sprintf("Updating %s to current Slashdiablo patch", path)}
+		state <- PatchState{Message: fmt.Sprintf("Updating %s to current Resurgence patch", path)}
 
 		if err = s.doPatch(patchFiles, patchLength, "current", path, progress); err != nil {
 			patchErr := err
@@ -779,7 +779,7 @@ func (s *service) downloadFile(fileName string, remoteDir string, path string, c
 	defer out.Close()
 
 	f := fmt.Sprintf("%s/%s", remoteDir, fileName)
-	contents, err := s.slashdiabloClient.GetFile(f)
+	contents, err := s.resurgenceClient.GetFile(f)
 	if err != nil {
 		return err
 	}
@@ -944,7 +944,7 @@ func (s *service) getFilesToPatch(files []PatchFile, d2path string, filesToIgnor
 }
 
 func (s *service) getManifest(path string) (*Manifest, error) {
-	contents, err := s.slashdiabloClient.GetFile(path)
+	contents, err := s.resurgenceClient.GetFile(path)
 	if err != nil {
 		return nil, err
 	}
@@ -1039,13 +1039,13 @@ type PatchAction struct {
 
 // NewService returns a service with all the dependencies.
 func NewService(
-	slashdiabloClient slashdiablo.Client,
+	resurgenceClient resurgence.Client,
 	configuration config.Service,
 	logger log.Logger,
 	patchFileModel *FileModel,
 ) Service {
 	s := &service{
-		slashdiabloClient: slashdiabloClient,
+		resurgenceClient: resurgenceClient,
 		configService:     configuration,
 		logger:            logger,
 		gameStates:        make(chan execState, 4),

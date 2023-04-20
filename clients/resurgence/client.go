@@ -1,4 +1,4 @@
-package slashdiablo
+package resurgence
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// Client encapsulates the details of the Slashdiablo API.
+// Client encapsulates the details of the Resurgence API.
 type Client struct {
 	address string
 }
@@ -44,6 +44,6 @@ func (c *Client) GetAvailableMods() (io.ReadCloser, error) {
 // NewClient returns a new client with all dependencies setup.
 func NewClient() Client {
 	return Client{
-		address: "http://slashdiablo.net/files",
+		address: "http://localhost:8000/files",
 	}
 }

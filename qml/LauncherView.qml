@@ -4,25 +4,15 @@ Item {
     id: launchView
     property bool configButtonHovered: false
     width: parent.width; height: parent.height
-    
-    Item {
-        id: logobg
-        width: 210.6
-        height: 240.3
-        anchors.top: parent.top
-        anchors.topMargin: 26
-        anchors.horizontalCenter: parent.horizontalCenter
-        Image { source: "assets/logo-bg.png"; anchors.fill: parent; fillMode: Image.PreserveAspectFit; opacity: 1.0 }
-    }
 
     Item {
         id: logotext
-        width: 216
-        height: 63.9
+        width: 276
+        height: 162
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 116
-        Image { source: "assets/logo-text.png"; anchors.fill: parent; fillMode: Image.PreserveAspectFit; opacity: 1.0 }
+        Image { source: "assets/resurgence-logo.png"; anchors.fill: parent; fillMode: Image.PreserveAspectFit; opacity: 1.0 }
     }
 
     // Sidebar to the right.
