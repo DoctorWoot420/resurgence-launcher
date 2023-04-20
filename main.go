@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/doctorwoot420/goqmlframeless"
+	"github.com/nokka/goqmlframeless"
 	"github.com/doctorwoot420/resurgence-launcher/bridge"
 	ladderClient "github.com/doctorwoot420/resurgence-launcher/clients/ladder"
 	"github.com/doctorwoot420/resurgence-launcher/clients/slashdiablo"
