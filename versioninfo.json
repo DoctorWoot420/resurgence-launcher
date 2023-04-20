@@ -23,7 +23,7 @@
         "CompanyName": "Slashdiablo",
         "FileDescription": "Slashdiablo Launcher",
         "FileVersion": "v1.1.2.0",
-        "InternalName": "slashdiablo-launcher.exe",
+        "InternalName": "resurgence-launcher.exe",
         "LegalCopyright": "Copyright (c) 2020 Slashdiablo",
         "LegalTrademarks": "",
         "OriginalFilename": "Slashdiablo.exe",
@@ -39,5 +39,5 @@
         }
     },
     "IconPath": "icon.ico",
-    "ManifestPath": "slashdiablo-launcher.exe.manifest"
+    "ManifestPath": "resurgence-launcher.exe.manifest"
 }

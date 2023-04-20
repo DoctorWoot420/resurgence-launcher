@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/nokka/slashdiablo-launcher/clients/slashdiablo"
+	"github.com/nokka/resurgence-launcher/clients/slashdiablo"
 )
 
 // Service is responsible for all things related to the news.

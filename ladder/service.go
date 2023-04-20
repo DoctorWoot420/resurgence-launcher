@@ -3,7 +3,7 @@ package ladder
 import (
 	"errors"
 
-	ladderClient "github.com/nokka/slashdiablo-launcher/clients/ladder"
+	ladderClient "github.com/nokka/resurgence-launcher/clients/ladder"
 )
 
 // Service is responsible for all things related to the Slashdiablo ladder.

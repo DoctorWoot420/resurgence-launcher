@@ -1,4 +1,4 @@
-//go:generate goversioninfo -icon=icon.ico -manifest=slashdiablo-launcher.exe.manifest -64
+//go:generate goversioninfo -icon=icon.ico -manifest=resurgence-launcher.exe.manifest -64
 
 package main
 
@@ -9,15 +9,15 @@ import (
 	"strconv"
 
 	"github.com/nokka/goqmlframeless"
-	"github.com/nokka/slashdiablo-launcher/bridge"
-	ladderClient "github.com/nokka/slashdiablo-launcher/clients/ladder"
-	"github.com/nokka/slashdiablo-launcher/clients/slashdiablo"
-	"github.com/nokka/slashdiablo-launcher/config"
-	"github.com/nokka/slashdiablo-launcher/d2"
-	"github.com/nokka/slashdiablo-launcher/ladder"
-	"github.com/nokka/slashdiablo-launcher/log"
-	"github.com/nokka/slashdiablo-launcher/news"
-	"github.com/nokka/slashdiablo-launcher/storage"
+	"github.com/nokka/resurgence-launcher/bridge"
+	ladderClient "github.com/nokka/resurgence-launcher/clients/ladder"
+	"github.com/nokka/resurgence-launcher/clients/slashdiablo"
+	"github.com/nokka/resurgence-launcher/config"
+	"github.com/nokka/resurgence-launcher/d2"
+	"github.com/nokka/resurgence-launcher/ladder"
+	"github.com/nokka/resurgence-launcher/log"
+	"github.com/nokka/resurgence-launcher/news"
+	"github.com/nokka/resurgence-launcher/storage"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/quick"
 	"github.com/therecipe/qt/widgets"

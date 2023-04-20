@@ -1,8 +1,8 @@
 package bridge
 
 import (
-	"github.com/nokka/slashdiablo-launcher/log"
-	"github.com/nokka/slashdiablo-launcher/news"
+	"github.com/nokka/resurgence-launcher/log"
+	"github.com/nokka/resurgence-launcher/news"
 	"github.com/therecipe/qt/core"
 )
 
