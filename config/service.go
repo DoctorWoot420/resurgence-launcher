@@ -6,8 +6,8 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	"github.com/nokka/resurgence-launcher/clients/slashdiablo"
-	"github.com/nokka/resurgence-launcher/storage"
+	"github.com/doctorwoot420/resurgence-launcher/clients/slashdiablo"
+	"github.com/doctorwoot420/resurgence-launcher/storage"
 )
 
 // Service is responsible for all things related to configuration.

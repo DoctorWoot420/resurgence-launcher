@@ -1,8 +1,8 @@
 package bridge
 
 import (
-	"github.com/nokka/resurgence-launcher/log"
-	"github.com/nokka/resurgence-launcher/news"
+	"github.com/doctorwoot420/resurgence-launcher/log"
+	"github.com/doctorwoot420/resurgence-launcher/news"
 	"github.com/therecipe/qt/core"
 )
 

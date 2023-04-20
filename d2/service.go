@@ -11,10 +11,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/nokka/resurgence-launcher/clients/slashdiablo"
-	"github.com/nokka/resurgence-launcher/config"
-	"github.com/nokka/resurgence-launcher/log"
-	"github.com/nokka/resurgence-launcher/storage"
+	"github.com/doctorwoot420/resurgence-launcher/clients/slashdiablo"
+	"github.com/doctorwoot420/resurgence-launcher/config"
+	"github.com/doctorwoot420/resurgence-launcher/log"
+	"github.com/doctorwoot420/resurgence-launcher/storage"
 )
 
 // Service is responsible for all things related to the Slashdiablo ladder.

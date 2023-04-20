@@ -1,7 +1,7 @@
 # Slashdiablo launcher
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/nokka/resurgence-launcher)](https://goreportcard.com/report/github.com/nokka/resurgence-launcher)
-[![GoDoc](https://godoc.org/github.com/nokka/resurgence-launcher?status.svg)](https://godoc.org/github.com/nokka/resurgence-launcher)
+[![Go Report Card](https://goreportcard.com/badge/github.com/doctorwoot420/resurgence-launcher)](https://goreportcard.com/report/github.com/doctorwoot420/resurgence-launcher)
+[![GoDoc](https://godoc.org/github.com/doctorwoot420/resurgence-launcher?status.svg)](https://godoc.org/github.com/doctorwoot420/resurgence-launcher)
 
 ![launcher screenshot](/docs/launcher.png)
 
@@ -57,10 +57,10 @@ Use the [installer](https://download.qt.io/official_releases/qt/5.13/5.13.0/qt-o
 $ go get -u -v -tags=no_env github.com/therecipe/qt/cmd/...
 
 # Download the repository with dependencies
-$ go get -d -u -v github.com/nokka/resurgence-launcher
+$ go get -d -u -v github.com/doctorwoot420/resurgence-launcher
 
 # Build the launcher
-$ cd $(go env GOPATH)/src/github.com/nokka/resurgence-launcher
+$ cd $(go env GOPATH)/src/github.com/doctorwoot420/resurgence-launcher
 $ qtdeploy build
 
 # Start launcher (different depending on OS)
@@ -103,5 +103,5 @@ $  go generate
 ### MacOS (from MacOS only)
 
 ```bash
-$ qtdeploy build darwin github.com/nokka/resurgence-launcher
+$ qtdeploy build darwin github.com/doctorwoot420/resurgence-launcher
 ```
