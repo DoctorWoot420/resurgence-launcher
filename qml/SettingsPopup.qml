@@ -144,7 +144,7 @@ Popup {
                             width: intro.width
 
                             Title {
-                               text: "WELCOME TO resurgence LAUNCHER"
+                               text: "WELCOME TO RESURGENCE LAUNCHER"
                                font.pixelSize: 20
                             }
 

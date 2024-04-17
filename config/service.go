@@ -67,8 +67,8 @@ func (s *service) AddGame() {
 	// Default values.
 	g.Instances = 1
 	g.Flags = []string{"-3dfx", "-skiptobnet"}
-	g.HDVersion = ModVersionNone
-	g.MaphackVersion = ModVersionNone
+	g.HDVersion = "3.0"
+	g.MaphackVersion = "1.9.9"
 
 	s.gameModel.AddGame(g)
 }

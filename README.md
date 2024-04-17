@@ -6,7 +6,7 @@
 
 Resurgence launcher is a cross platform game launcher for Diablo II created by the [Slashdiablo](https://old.reddit.com/r/slashdiablo/) community and adapted for the Slashdiablo Resurgence mod. It was built to help new players install patches, updating registries and help with other technical issues to lower the barrier of entry into the Resurgence community, while also assisting more experienced players with more advanced settings such as HD mods and launching multiple boxes.
 
-## Important Credits
+## Important credits
 
 This project distributes the work of many folk in the community, primary credits go to Nokka for the launcher, Mir Drualga for the HD code, the many folk who have contributed to BH, and Bayaraa/Jarcho for d2gl components.
 
