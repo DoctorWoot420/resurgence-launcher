@@ -44,6 +44,6 @@ func (c *Client) GetAvailableMods() (io.ReadCloser, error) {
 // NewClient returns a new client with all dependencies setup.
 func NewClient() Client {
 	return Client{
-		address: "http://localhost:8000/files",
+		address: "http://resurgence.dadhost.site:8420/files",
 	}
 }
