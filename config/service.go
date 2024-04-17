@@ -5,9 +5,9 @@ import (
 	"io/ioutil"
 	"sync"
 
-	"github.com/google/uuid"
 	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
 	"github.com/ToddMinerTech/resurgence-launcher/storage"
+	"github.com/google/uuid"
 )
 
 // Service is responsible for all things related to configuration.
@@ -36,9 +36,9 @@ type Service interface {
 
 type service struct {
 	resurgenceClient resurgence.Client
-	store             storage.Store
-	gameModel         *GameModel
-	mutex             sync.Mutex
+	store            storage.Store
+	gameModel        *GameModel
+	mutex            sync.Mutex
 }
 
 // Read will read the configuration and return it.
@@ -66,7 +66,7 @@ func (s *service) AddGame() {
 
 	// Default values.
 	g.Instances = 1
-	g.Flags = []string{"-w", "-skiptobnet"}
+	g.Flags = []string{"-3dfx", "-skiptobnet"}
 	g.HDVersion = ModVersionNone
 	g.MaphackVersion = ModVersionNone
 
@@ -232,7 +232,7 @@ func NewService(
 ) Service {
 	return &service{
 		resurgenceClient: resurgenceClient,
-		store:             store,
-		gameModel:         gameModel,
+		store:            store,
+		gameModel:        gameModel,
 	}
 }

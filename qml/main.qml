@@ -23,7 +23,7 @@ Item {
         id: topbar
         anchors.top: parent.top;
         width: parent.width
-        height: 80
+        height: 40
     }
 
     // Content area.

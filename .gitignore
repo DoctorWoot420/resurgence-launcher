@@ -1,6 +1,8 @@
 #directories
 deploy/
 darwin/
+vendor/
+build/
 
 #file extensions
 *.o
