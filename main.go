@@ -8,7 +8,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/nokka/goqmlframeless"
 	"github.com/ToddMinerTech/resurgence-launcher/bridge"
 	ladderClient "github.com/ToddMinerTech/resurgence-launcher/clients/ladder"
 	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
@@ -18,6 +17,7 @@ import (
 	"github.com/ToddMinerTech/resurgence-launcher/log"
 	"github.com/ToddMinerTech/resurgence-launcher/news"
 	"github.com/ToddMinerTech/resurgence-launcher/storage"
+	"github.com/nokka/goqmlframeless"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/quick"
 	"github.com/therecipe/qt/widgets"
@@ -28,14 +28,14 @@ func main() {
 	var (
 		debugMode    = envBool("DEBUG_MODE", false)
 		environment  = envString("ENVIRONMENT", "production")
-		buildVersion = envString("BUILD_VERSION", "v1.1.2")
+		buildVersion = envString("BUILD_VERSION", "v0.0.1")
 	)
 
 	// Set app context.
 	core.QCoreApplication_SetApplicationName("Resurgence launcher")
-	core.QCoreApplication_SetOrganizationName("slashdiablo.net")
-	core.QCoreApplication_SetOrganizationDomain("slashdiablo.net")
-	core.QCoreApplication_SetApplicationVersion("1.1.2")
+	core.QCoreApplication_SetOrganizationName("SlashdiabloResurgence")
+	core.QCoreApplication_SetOrganizationDomain("https://resurgence.slashgaming.net/")
+	core.QCoreApplication_SetApplicationVersion("0.0.1")
 
 	// Enable high dpi scaling, useful for devices with high pixel density displays.
 	core.QCoreApplication_SetAttribute(core.Qt__AA_EnableHighDpiScaling, true)

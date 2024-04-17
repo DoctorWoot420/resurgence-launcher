@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: topbar
-    height:30
+    height:40
     property string activeMenuItem: "launch"
     property bool settingsHovered: false
     property var menuSources: { 
