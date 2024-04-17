@@ -13,21 +13,6 @@ Rectangle {
         Column {
             width: parent.width
 
-            // Logtypes always showing.
-            Item {
-                width: parent.width
-                height: 240
-
-                Item {
-                    width: 276
-                    height: 162
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: 109
-                    Image { source: "assets/resurgence-logo.png"; anchors.fill: parent; fillMode: Image.PreserveAspectFit; }
-                }
-            }
-
             // While loading.
             Column {
                 width: parent.width

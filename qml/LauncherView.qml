@@ -5,16 +5,6 @@ Item {
     property bool configButtonHovered: false
     width: parent.width; height: parent.height
 
-    Item {
-        id: logotext
-        width: 276
-        height: 162
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 116
-        Image { source: "assets/resurgence-logo.png"; anchors.fill: parent; fillMode: Image.PreserveAspectFit; opacity: 1.0 }
-    }
-
     // Sidebar to the right.
     Item {
         id: sidebar

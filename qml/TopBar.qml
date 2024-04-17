@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: topbar
+    height:30
     property string activeMenuItem: "launch"
     property bool settingsHovered: false
     property var menuSources: { 
@@ -22,7 +23,7 @@ Item {
             id: mainMenu
             anchors.fill: parent
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            spacing: 6
+            spacing: 4
 
             Item {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -46,7 +47,7 @@ Item {
                 width: 130
                 
                 MenuItem {
-                    width: 110
+                    width: 90
                     text: "ARMORY"
                     active: (activeMenuItem == "armory")
 
@@ -73,7 +74,7 @@ Item {
                 width: 130
                 
                 MenuItem {
-                    width: 110
+                    width: 90
                     text: "DISCORD"
                     active: (activeMenuItem == "discord")
 
@@ -136,5 +137,7 @@ Item {
 
     Separator{
         color: "#161616"
+        anchors.bottom: parent.bottom
+        height: 1 
     }
 }
