@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/doctorwoot420/resurgence-launcher/clients/resurgence"
+	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
 )
 
 // Service is responsible for all things related to the news.
@@ -14,7 +14,7 @@ type Service interface {
 }
 
 type service struct {
-	client    Resurgence.Client
+	client    resurgence.Client
 	newsModel *Model
 }
 
@@ -73,7 +73,7 @@ func newItem(item JSONItem) *Item {
 
 // NewService returns a service with all the dependencies.
 func NewService(
-	client Resurgence.Client,
+	client resurgence.Client,
 	newsModel *Model,
 ) Service {
 	return &service{

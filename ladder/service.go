@@ -3,7 +3,7 @@ package ladder
 import (
 	"errors"
 
-	ladderClient "github.com/doctorwoot420/resurgence-launcher/clients/ladder"
+	ladderClient "github.com/ToddMinerTech/resurgence-launcher/clients/ladder"
 )
 
 // Service is responsible for all things related to the Resurgence ladder.

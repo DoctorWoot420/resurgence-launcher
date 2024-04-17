@@ -6,8 +6,8 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	"github.com/doctorwoot420/resurgence-launcher/clients/resurgence"
-	"github.com/doctorwoot420/resurgence-launcher/storage"
+	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
+	"github.com/ToddMinerTech/resurgence-launcher/storage"
 )
 
 // Service is responsible for all things related to configuration.
@@ -35,7 +35,7 @@ type Service interface {
 }
 
 type service struct {
-	ResurgenceClient Resurgence.Client
+	resurgenceClient resurgence.Client
 	store             storage.Store
 	gameModel         *GameModel
 	mutex             sync.Mutex
@@ -206,7 +206,7 @@ func (s *service) UpdateLaunchDelay(delay int) error {
 
 // GetAvailableMods will get available mods from the Resurgence API.
 func (s *service) GetAvailableMods() (*GameMods, error) {
-	contents, err := s.ResurgenceClient.GetAvailableMods()
+	contents, err := s.resurgenceClient.GetAvailableMods()
 	if err != nil {
 		return nil, err
 	}
@@ -226,12 +226,12 @@ func (s *service) GetAvailableMods() (*GameMods, error) {
 
 // NewService returns a service with all the dependencies.
 func NewService(
-	ResurgenceClient Resurgence.Client,
+	resurgenceClient resurgence.Client,
 	store storage.Store,
 	gameModel *GameModel,
 ) Service {
 	return &service{
-		ResurgenceClient: ResurgenceClient,
+		resurgenceClient: resurgenceClient,
 		store:             store,
 		gameModel:         gameModel,
 	}

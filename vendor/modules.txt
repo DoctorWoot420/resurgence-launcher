@@ -1,0 +1,27 @@
+# github.com/google/uuid v1.6.0
+## explicit
+github.com/google/uuid
+# github.com/gopherjs/gopherjs v1.17.2
+## explicit; go 1.17
+github.com/gopherjs/gopherjs/js
+# github.com/nokka/goqmlframeless v1.1.0
+## explicit
+github.com/nokka/goqmlframeless
+# github.com/therecipe/qt v0.0.0-20200904063919-c0c124a5770d
+## explicit
+github.com/therecipe/qt
+github.com/therecipe/qt/core
+github.com/therecipe/qt/gui
+github.com/therecipe/qt/internal
+github.com/therecipe/qt/interop/gow
+github.com/therecipe/qt/network
+github.com/therecipe/qt/qml
+github.com/therecipe/qt/quick
+github.com/therecipe/qt/svg
+github.com/therecipe/qt/widgets
+# github.com/therecipe/qt/internal/binding/files/docs/5.13.0 v0.0.0-20200904063919-c0c124a5770d
+## explicit
+# golang.org/x/sys v0.19.0
+## explicit; go 1.18
+golang.org/x/sys/windows
+golang.org/x/sys/windows/registry

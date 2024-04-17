@@ -7,8 +7,8 @@ Item {
     property bool settingsHovered: false
     property var menuSources: { 
         "launch": "LauncherView.qml",
-        "ladder": "LadderView.qml",
-        "community": "CommunityView.qml"
+        "armory": "ArmoryView.qml",
+        "discord": "CommunityView.qml"
     }
 
     // Main menu.
@@ -43,15 +43,26 @@ Item {
             Item {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 height: parent.height
-                width: 100
+                width: 130
                 
                 MenuItem {
-                    text: "LADDER"
-                    active: (activeMenuItem == "ladder")
+                    width: 110
+                    text: "ARMORY"
+                    active: (activeMenuItem == "armory")
 
                     onClicked: function() {
-                        activeMenuItem = "ladder"
-                        contentLoader.source = menuSources.ladder
+                        Qt.openUrlExternally("https://rustyshackleford1888.github.io/")
+                    }
+
+                    Image {
+                        id: linkoutIcon
+                        fillMode: Image.Pad
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        width: 16
+                        height: 16
+                        source: "assets/icons/out.png"
+                        opacity: 0.2
                     }
                 }
             }
@@ -63,11 +74,11 @@ Item {
                 
                 MenuItem {
                     width: 110
-                    text: "COMMUNITY"
-                    active: (activeMenuItem == "community")
+                    text: "DISCORD"
+                    active: (activeMenuItem == "discord")
 
                     onClicked: function() {
-                        Qt.openUrlExternally("https://old.22reddit.com/r/Resurgence/")
+                        Qt.openUrlExternally("https://discord.gg/hsagMy9d")
                     }
 
                     Image {

@@ -1,4 +1,4 @@
-package Resurgence
+package resurgence
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type Client struct {
 
 // GetFile will the file by the given path in the repository set on the service.
 func (c *Client) GetFile(filePath string) (io.ReadCloser, error) {
-	resp, err := http.Get(fmt.Sprintf("%s/current_patch/%s", c.address, filePath))
+	resp, err := http.Get(fmt.Sprintf("%s/slashdiablo-patches/%s", c.address, filePath))
 	if err != nil {
 		return nil, err
 	}
@@ -44,6 +44,6 @@ func (c *Client) GetAvailableMods() (io.ReadCloser, error) {
 // NewClient returns a new client with all dependencies setup.
 func NewClient() Client {
 	return Client{
-		address: "https://resurgence.slashgaming.net/files",
+		address: "http://localhost:8000/files",
 	}
 }

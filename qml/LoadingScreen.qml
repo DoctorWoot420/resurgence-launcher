@@ -17,23 +17,14 @@ Rectangle {
             Item {
                 width: parent.width
                 height: 240
-                
-                Item {
-                    width: 210.6
-                    height: 240.3
-                    anchors.top: parent.top
-                    anchors.topMargin: 20
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Image { source: "assets/logo-bg.png"; anchors.fill: parent; fillMode: Image.PreserveAspectFit; }
-                }
 
                 Item {
-                    width: 216
-                    height: 63.9
+                    width: 276
+                    height: 162
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: parent.top
                     anchors.topMargin: 109
-                    Image { source: "assets/logo-text.png"; anchors.fill: parent; fillMode: Image.PreserveAspectFit; }
+                    Image { source: "assets/resurgence-logo.png"; anchors.fill: parent; fillMode: Image.PreserveAspectFit; }
                 }
             }
 
@@ -51,7 +42,7 @@ Rectangle {
                         anchors.bottom: parent.bottom
                         font.pixelSize: 16
                         color: "#736c6a"
-                        text: "CONNECTING TO Resurgence API..."
+                        text: "CONNECTING TO resurgence API..."
                     }
                 }
 

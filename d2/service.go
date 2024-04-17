@@ -11,10 +11,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doctorwoot420/resurgence-launcher/clients/resurgence"
-	"github.com/doctorwoot420/resurgence-launcher/config"
-	"github.com/doctorwoot420/resurgence-launcher/log"
-	"github.com/doctorwoot420/resurgence-launcher/storage"
+	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
+	"github.com/ToddMinerTech/resurgence-launcher/config"
+	"github.com/ToddMinerTech/resurgence-launcher/log"
+	"github.com/ToddMinerTech/resurgence-launcher/storage"
 )
 
 // Service is responsible for all things related to the Resurgence ladder.
@@ -37,7 +37,7 @@ type Service interface {
 
 // Service is responsible for all things related to Diablo II.
 type service struct {
-	ResurgenceClient Resurgence.Client
+	resurgenceClient resurgence.Client
 	configService     config.Service
 	logger            log.Logger
 	gameStates        chan execState
@@ -110,7 +110,7 @@ func (s *service) getAvailableMods() (*config.GameMods, error) {
 	}
 
 	// No cached mods exist, fetch remote mods.
-	contents, err := s.ResurgenceClient.GetAvailableMods()
+	contents, err := s.resurgenceClient.GetAvailableMods()
 	if err != nil {
 		return nil, err
 	}
@@ -779,7 +779,7 @@ func (s *service) downloadFile(fileName string, remoteDir string, path string, c
 	defer out.Close()
 
 	f := fmt.Sprintf("%s/%s", remoteDir, fileName)
-	contents, err := s.ResurgenceClient.GetFile(f)
+	contents, err := s.resurgenceClient.GetFile(f)
 	if err != nil {
 		return err
 	}
@@ -944,7 +944,7 @@ func (s *service) getFilesToPatch(files []PatchFile, d2path string, filesToIgnor
 }
 
 func (s *service) getManifest(path string) (*Manifest, error) {
-	contents, err := s.ResurgenceClient.GetFile(path)
+	contents, err := s.resurgenceClient.GetFile(path)
 	if err != nil {
 		return nil, err
 	}
@@ -1039,13 +1039,13 @@ type PatchAction struct {
 
 // NewService returns a service with all the dependencies.
 func NewService(
-	ResurgenceClient Resurgence.Client,
+	resurgenceClient resurgence.Client,
 	configuration config.Service,
 	logger log.Logger,
 	patchFileModel *FileModel,
 ) Service {
 	s := &service{
-		ResurgenceClient: ResurgenceClient,
+		resurgenceClient: resurgenceClient,
 		configService:     configuration,
 		logger:            logger,
 		gameStates:        make(chan execState, 4),

@@ -9,15 +9,15 @@ import (
 	"strconv"
 
 	"github.com/nokka/goqmlframeless"
-	"github.com/doctorwoot420/resurgence-launcher/bridge"
-	ladderClient "github.com/doctorwoot420/resurgence-launcher/clients/ladder"
-	"github.com/doctorwoot420/resurgence-launcher/clients/resurgence"
-	"github.com/doctorwoot420/resurgence-launcher/config"
-	"github.com/doctorwoot420/resurgence-launcher/d2"
-	"github.com/doctorwoot420/resurgence-launcher/ladder"
-	"github.com/doctorwoot420/resurgence-launcher/log"
-	"github.com/doctorwoot420/resurgence-launcher/news"
-	"github.com/doctorwoot420/resurgence-launcher/storage"
+	"github.com/ToddMinerTech/resurgence-launcher/bridge"
+	ladderClient "github.com/ToddMinerTech/resurgence-launcher/clients/ladder"
+	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
+	"github.com/ToddMinerTech/resurgence-launcher/config"
+	"github.com/ToddMinerTech/resurgence-launcher/d2"
+	"github.com/ToddMinerTech/resurgence-launcher/ladder"
+	"github.com/ToddMinerTech/resurgence-launcher/log"
+	"github.com/ToddMinerTech/resurgence-launcher/news"
+	"github.com/ToddMinerTech/resurgence-launcher/storage"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/quick"
 	"github.com/therecipe/qt/widgets"
@@ -33,8 +33,8 @@ func main() {
 
 	// Set app context.
 	core.QCoreApplication_SetApplicationName("Resurgence launcher")
-	core.QCoreApplication_SetOrganizationName("Resurgence.net")
-	core.QCoreApplication_SetOrganizationDomain("Resurgence.net")
+	core.QCoreApplication_SetOrganizationName("slashdiablo.net")
+	core.QCoreApplication_SetOrganizationDomain("slashdiablo.net")
 	core.QCoreApplication_SetApplicationVersion("1.1.2")
 
 	// Enable high dpi scaling, useful for devices with high pixel density displays.
@@ -94,7 +94,7 @@ func main() {
 	fm := d2.NewFileModel(nil)
 
 	// Setup clients.
-	sc := Resurgence.NewClient()
+	sc := resurgence.NewClient()
 	lc := ladderClient.NewClient()
 
 	// Setup services.
