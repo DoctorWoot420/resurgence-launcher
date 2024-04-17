@@ -13,7 +13,7 @@ Item {
 
     // Main menu.
     Item {
-        width: 330
+        width: 360
         height: parent.height
         anchors.left: parent.left
         anchors.leftMargin: 20
@@ -55,7 +55,7 @@ Item {
                     }
 
                     Image {
-                        id: linkoutIcon
+                        id: linkoutIcon1
                         fillMode: Image.Pad
                         anchors.top: parent.top
                         anchors.right: parent.right
@@ -82,7 +82,7 @@ Item {
                     }
 
                     Image {
-                        id: linkoutIcon
+                        id: linkoutIcon2
                         fillMode: Image.Pad
                         anchors.top: parent.top
                         anchors.right: parent.right
