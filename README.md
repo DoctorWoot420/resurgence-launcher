@@ -106,3 +106,100 @@ $  go generate
 ```bash
 $ qtdeploy build darwin github.com/nokka/slashdiablo-launcher
 ```
+
+### Additional windows environment setup notes
+Might clean this up later, but want to at least leave breadcrumbs.  The above instructions are direct copies from Nokka's repo, but I struggled a lot to build the application and get an environment running.  I do not recall the exact steps required but was eventually able to get this working.  Hopefully these help someone else (or myself down the line):
+
+General install steps from raw notes, some of these steps may not have been required, but it's what I did:
+- Download Qt5.13.0 from QT website site - open source versionm
+- In QT installer make sure to install qscript and mingw64 options, they are disabled by default
+- Do the go bindings env variables from therecipe repo's installation instructions for windows
+
+        These are the the relevent environment variables I ended up with:
+        QT_API=5.13.0
+        QT_DIR=C:\Qt
+        QT_VERSION=5.13.0
+        GOPATH=C:\Users\woahc\go
+        Path = ... C:\Program Files\Go\bin ... (only relevant one I see)
+
+
+- Proceed with the remaining install steps from therecipe/qt
+
+I did a bunch of fuckery around this point, cant remember it all.  Good luck.
+
+- Run qtsetup Takes a while, should work after this
+- Now run qtdeploy build desktop 
+
+All of this stuff was done in the source directory.  I didn't do this command mentioned above: cd $(go env GOPATH)/src/github.com/nokka/slashdiablo-launcher
+Instead I was just working within c:/www/slashdiablo-launcher running all of the related install and deployment commands.
+
+To build an msi there are scripts to do it better, but one solution is:
+Use qtdeploy build desktop, then use this program to make an msi
+https://www.advancedinstaller.com/user-guide/tutorial-create-simple-msi-installer.html 
+
+
+
+Then for setting up the patch server the key thing to know is about the file manifests.  You need to update the files you want, then each folder needs a new manifest.json.  You'll need to have a script that generates the crc value with the expected hash so it matches the local machine.  If you don't get these values right you'll get stuck with file sync errors.  This is a basic script from chat gpt that got the job done, but is certainly not an efficient method at all.
+
+# Remove previous type if already defined
+if ([System.Management.Automation.PSTypeName]'CRC32'.Type) {
+    Remove-TypeData -TypeName CRC32 -ErrorAction SilentlyContinue
+    Remove-TypeData -TypeName CRC32 -ErrorAction SilentlyContinue
+}
+
+# Add the CRC32 class with corrected scope and accessibility
+Add-Type -TypeDefinition @"
+using System;
+using System.IO;
+
+public class CRC32 {
+    uint[] table;
+
+    public uint ComputeChecksum(byte[] bytes) {
+        uint crc = 0xffffffff;
+        for (int i = 0; i < bytes.Length; i++) {
+            byte index = (byte)((crc & 0xff) ^ bytes[i]);
+            crc = (crc >> 8) ^ table[index];
+        }
+        return ~crc;
+    }
+
+    public CRC32() {
+        uint poly = 0xedb88320;
+        table = new uint[256];
+        for (int i = 0; i < 256; i++) {
+            uint crc = (uint)i;
+            for (int j = 8; j > 0; j--)
+                crc = (crc & 1) == 1 ? (crc >> 1) ^ poly : crc >> 1;
+            table[i] = crc;
+        }
+    }
+
+    public string ComputeChecksumString(byte[] bytes) {
+        return ComputeChecksum(bytes).ToString("x8");  // Output CRC in lowercase
+    }
+}
+"@
+
+# Compute CRC for each file and prepare the manifest
+$files = Get-ChildItem -File | ForEach-Object {
+    $crcInstance = New-Object CRC32
+    $fileData = [System.IO.File]::ReadAllBytes($_.FullName)
+    $crc = $crcInstance.ComputeChecksumString($fileData)
+    @{
+        name = $_.Name
+        crc = $crc
+        last_modified = $_.LastWriteTime.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")
+        content_length = $_.Length
+        ignore_crc = $false
+        deprecated = $false
+    }
+}
+
+# Convert file information to JSON and save to 'manifest.json'
+$manifest = @{
+    files = $files
+}
+$manifest | ConvertTo-Json -Depth 100 | Set-Content -Path 'manifest.json'
+
+
