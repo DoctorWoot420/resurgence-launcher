@@ -111,7 +111,8 @@ $ qtdeploy build darwin github.com/nokka/slashdiablo-launcher
 Might clean this up later, but want to at least leave breadcrumbs.  The above instructions are direct copies from Nokka's repo, but I struggled a lot to build the application and get an environment running.  I do not recall the exact steps required but was eventually able to get this working.  Hopefully these help someone else (or myself down the line):
 
 General install steps from raw notes, some of these steps may not have been required, but it's what I did:
-- Download Qt5.13.0 from QT website site - open source versionm
+- Download go from go website - ended up  with go version go1.22.2 windows/amd64
+- Download Qt5.13.0 from QT website site - open source version
 - In QT installer make sure to install qscript and mingw64 options, they are disabled by default
 - Do the go bindings env variables from therecipe repo's installation instructions for windows
 
@@ -121,7 +122,7 @@ General install steps from raw notes, some of these steps may not have been requ
         QT_VERSION=5.13.0
         GOPATH=C:\Users\woahc\go
         Path = ... C:\Program Files\Go\bin ... (only relevant one I see)
-
+        note that qmake doesn't work  for me but I saw it in a ton of documentation and it threw me on the wrong path.  qtdeploy can work when qmake doesnt.
 
 - Proceed with the remaining install steps from therecipe/qt
 
@@ -140,6 +141,9 @@ https://www.advancedinstaller.com/user-guide/tutorial-create-simple-msi-installe
 
 
 Then for setting up the patch server the key thing to know is about the file manifests.  You need to update the files you want, then each folder needs a new manifest.json.  You'll need to have a script that generates the crc value with the expected hash so it matches the local machine.  If you don't get these values right you'll get stuck with file sync errors.  This is a basic script from chat gpt that got the job done, but is certainly not an efficient method at all.
+
+Also consider that we need to set the flag ignore_crc in the manifest for any config files.  Specifically d2gl.ini and d2fps.ini are packaged in to help users avoid setup steps, but we don't want to sync back over their changed config.
+
 
 # Remove previous type if already defined
 if ([System.Management.Automation.PSTypeName]'CRC32'.Type) {

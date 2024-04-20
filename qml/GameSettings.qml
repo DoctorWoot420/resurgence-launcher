@@ -422,7 +422,7 @@ Item {
                     Column {
                         width: (settingsLayout.width - overrideMaphackCfg.width)
                         Title {
-                            text: "OVERRIDE MAPHACK CONFIG"
+                            text: "PREVENT MAPHACK CONFIG OVERRIDE"
                             font.pixelSize: 13
                         }
 
