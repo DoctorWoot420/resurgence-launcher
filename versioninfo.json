@@ -22,14 +22,14 @@
         "Comments": "Resurgence launcher",
         "CompanyName": "Resurgence",
         "FileDescription": "Resurgence Launcher",
-        "FileVersion": "v0.1.2",
+        "FileVersion": "v1.0.0",
         "InternalName": "resurgence-launcher.exe",
         "LegalCopyright": "Copyright (c) 2024 Slashdiablo Resurgence",
         "LegalTrademarks": "",
         "OriginalFilename": "Resurgence.exe",
         "PrivateBuild": "",
         "ProductName": "Resurgence launcher",
-        "ProductVersion": "v0.1.2",
+        "ProductVersion": "v1.0.0",
         "SpecialBuild": ""
     },
     "VarFileInfo": {
