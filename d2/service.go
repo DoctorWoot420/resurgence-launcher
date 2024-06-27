@@ -38,13 +38,13 @@ type Service interface {
 // Service is responsible for all things related to Diablo II.
 type service struct {
 	resurgenceClient resurgence.Client
-	configService     config.Service
-	logger            log.Logger
-	gameStates        chan execState
-	availableMods     *config.GameMods
-	runningGames      []game
-	mux               sync.Mutex
-	patchFileModel    *FileModel
+	configService    config.Service
+	logger           log.Logger
+	gameStates       chan execState
+	availableMods    *config.GameMods
+	runningGames     []game
+	mux              sync.Mutex
+	patchFileModel   *FileModel
 }
 
 type game struct {
@@ -354,7 +354,7 @@ func (s *service) Patch(done chan bool) (<-chan float32, <-chan PatchState) {
 			var ignoredMaphackFiles []string
 
 			if game.OverrideBHCfg {
-				ignoredMaphackFiles = append(ignoredMaphackFiles, "BH.cfg")
+				ignoredMaphackFiles = append(ignoredMaphackFiles, "BH.cfg", "BH_settings.cfg")
 			}
 
 			// Reset the maphack versions, to avoid rogue files and duplicates.
@@ -521,7 +521,7 @@ func (s *service) validateMaphackVersion(game *storage.Game, versions []string) 
 		var ignoredMaphackFiles []string
 
 		if game.OverrideBHCfg {
-			ignoredMaphackFiles = append(ignoredMaphackFiles, "BH.cfg")
+			ignoredMaphackFiles = append(ignoredMaphackFiles, "BH.cfg", "BH_settings.cfg")
 		}
 		// This particular maphack version should be installed.
 		if game.MaphackVersion == v {
@@ -1046,10 +1046,10 @@ func NewService(
 ) Service {
 	s := &service{
 		resurgenceClient: resurgenceClient,
-		configService:     configuration,
-		logger:            logger,
-		gameStates:        make(chan execState, 4),
-		patchFileModel:    patchFileModel,
+		configService:    configuration,
+		logger:           logger,
+		gameStates:       make(chan execState, 4),
+		patchFileModel:   patchFileModel,
 	}
 
 	// Setup game listener once, will stay alive for the duration
