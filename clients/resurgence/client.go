@@ -44,6 +44,6 @@ func (c *Client) GetAvailableMods() (io.ReadCloser, error) {
 // NewClient returns a new client with all dependencies setup.
 func NewClient() Client {
 	return Client{
-		address: "https://d2resurgence.github.io/patch-d2lod",
+		address: "https://d2resurgence.github.io/patch-d2lod/files",
 	}
 }
