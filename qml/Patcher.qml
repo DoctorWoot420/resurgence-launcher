@@ -133,7 +133,7 @@ Item {
                 anchors.rightMargin: 13
                 anchors.right: parent.right
                 currentIndex: 0
-                model: ["1 sec", "2 sec", "3 sec", "4 sec", "5 sec"]
+                model: ["1 sec", "2 sec", "3 sec", "4 sec", "5 sec", "6 sec", "7 sec", "8 sec"]
                 height: 30
                 width: 70
 
@@ -165,6 +165,15 @@ Item {
                             break;
                         case "5 sec":
                             delay = 5000
+                            break;
+                        case "6 sec":
+                            delay = 6000
+                            break;
+                        case "7 sec":
+                            delay = 7000
+                            break;
+                        case "8 sec":
+                            delay = 8000
                             break;
 
                     }
