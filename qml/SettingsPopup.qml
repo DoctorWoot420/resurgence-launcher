@@ -144,8 +144,8 @@ Popup {
                             width: intro.width
 
                             Title {
-                               text: "WELCOME TO RESURGENCE LAUNCHER"
-                               font.pixelSize: 20
+                               text: "INSTALL DIABLO II RESURGENCE"
+                               font.pixelSize: 24
                             }
 
                             Separator{}
@@ -156,12 +156,12 @@ Popup {
                             width: intro.width
 
                             SText {
-                                text: "Before you can play, you need to setup your game locations. You can setup multiple game directories with different settings such as HD mod or maphack."
+                                text: "Before starting you must have Diablo II installed somewhere on your PC.  Any version should work."
                                 width: parent.width
                                 anchors.top: parent.top
                                 anchors.left: parent.left
                                 anchors.topMargin: 10
-                                font.pixelSize: 12
+                                font.pixelSize: 14
                                 color: "#a3a3a3"
                                 wrapMode: Text.WordWrap 
                             }
@@ -173,7 +173,7 @@ Popup {
 
                             Title {
                                text: "HOW IT WORKS"
-                               font.pixelSize: 16
+                               font.pixelSize: 18
                             }
 
                             Separator{}
@@ -202,8 +202,9 @@ Popup {
                                 }
 
                                 SText {
-                                    text: "Setup one or multiple Diablo II games you have installed"
+                                    text: "Select your Diablo II installation folder"
                                     anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 14
                                     color: "#a3a3a3"
                                 }
                                 
@@ -235,8 +236,9 @@ Popup {
                                 }
 
                                 SText {
-                                    text: "Choose how many instances to launch and if you want HD or maphack included"
+                                    text: "Configure your game and launch parameters, and run the built-in DEP tool"
                                     anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 14
                                     color: "#a3a3a3"
                                 }
                                 
@@ -268,8 +270,9 @@ Popup {
                                 }
 
                                 SText {
-                                    text: "The launcher will figure out if you need to patch the games to be up to date with Resurgence"
+                                    text: "The launcher will automatically patch all Resurgence files and selected features"
                                     anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 14
                                     color: "#a3a3a3"
                                 }
                                 
@@ -300,15 +303,30 @@ Popup {
                                     }
                                 }
 
-                                SText {
-                                    text: "After patching is done you're ready to play"
+                                Text {
+                                    text: "After patching is done you're ready to play. If you have any trouble, check out the <a href='https://diablo2resurgence.fandom.com/wiki/Resurgence_Launcher_FAQs' style='color:#ffffff'>Launcher FAQs</a>"
                                     anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 14
                                     color: "#a3a3a3"
-                                } 
+                                    textFormat: Text.RichText
+                                    onLinkActivated: {
+                                        Qt.openUrlExternally(link)
+                                    }
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        Qt.openUrlExternally("https://diablo2resurgence.fandom.com/wiki/Resurgence_Launcher_FAQs")
+                                    }
+                                }
                             }
 
-                            Separator{}
+                            Separator {}
                         }
+
+
 
                         Item {
                             height: 80

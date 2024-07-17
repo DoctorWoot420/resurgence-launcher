@@ -15,7 +15,7 @@ Item {
         id: background
         anchors.fill: parent;
         color: "#0a0a0d"
-        Image { source: "assets/resurgence-bg1.png"; fillMode: Image.PreserveAspectCrop; anchors.fill: parent;}
+        Image { source: "assets/resurgence-bg3.png"; fillMode: Image.PreserveAspectCrop; anchors.fill: parent;}
     }
 
     // Top bar for the entire app.
