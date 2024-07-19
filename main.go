@@ -38,7 +38,8 @@ func main() {
 	core.QCoreApplication_SetApplicationVersion("1.1.0")
 
 	// Enable high dpi scaling, useful for devices with high pixel density displays.
-	core.QCoreApplication_SetAttribute(core.Qt__AA_EnableHighDpiScaling, true)
+	// This was set to true in the SlashDiablo version, but it made the launcher unusable on 1920x1080 at 150% zoom.  Kinda a rediculous config but setting to false makes it work ok.
+	core.QCoreApplication_SetAttribute(core.Qt__AA_EnableHighDpiScaling, false)
 
 	// Create base application.
 	app := widgets.NewQApplication(len(os.Args), os.Args)
