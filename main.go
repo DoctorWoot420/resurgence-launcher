@@ -28,14 +28,14 @@ func main() {
 	var (
 		debugMode    = envBool("DEBUG_MODE", false)
 		environment  = envString("ENVIRONMENT", "production")
-		buildVersion = envString("BUILD_VERSION", "v1.1.0")
+		buildVersion = envString("BUILD_VERSION", "v1.1.1")
 	)
 
 	// Set app context.
 	core.QCoreApplication_SetApplicationName("Resurgence launcher")
 	core.QCoreApplication_SetOrganizationName("SlashdiabloResurgence")
 	core.QCoreApplication_SetOrganizationDomain("https://resurgence.slashgaming.net/")
-	core.QCoreApplication_SetApplicationVersion("1.1.0")
+	core.QCoreApplication_SetApplicationVersion("1.1.1")
 
 	// Enable high dpi scaling, useful for devices with high pixel density displays.
 	// This was set to true in the SlashDiablo version, but it made the launcher unusable on 1920x1080 at 150% zoom.  Kinda a rediculous config but setting to false makes it work ok.
