@@ -17,7 +17,12 @@ Popup {
         "override_bh_cfg": 264,
         "flags": 272,
         "hd_version": 288,
-        "maphack_version": 320
+        "maphack_version": 320,
+        "maphack_default_gs": 384,
+        "maphack_default_game_name": 512,
+        "maphack_default_password": 768,
+        "maphack_rune_design": 1280,
+        "maphack_filter_blocks": 2304
     }
 
     modal: true
@@ -442,12 +447,14 @@ Popup {
                 "id": model.data(model.index(gamesList.currentIndex, 0), gameRoles.id),
                 "location": model.data(model.index(gamesList.currentIndex, 0), gameRoles.location),
                 "instances": model.data(model.index(gamesList.currentIndex, 0), gameRoles.instances),
-                "maphack": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack),
-                "override_bh_cfg": model.data(model.index(gamesList.currentIndex, 0), gameRoles.override_bh_cfg),
-                "hd": model.data(model.index(gamesList.currentIndex, 0), gameRoles.hd),
                 "flags": model.data(model.index(gamesList.currentIndex, 0), gameRoles.flags),
                 "hd_version": model.data(model.index(gamesList.currentIndex, 0), gameRoles.hd_version),
                 "maphack_version": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_version),
+                "maphack_default_gs": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_default_gs),
+                "maphack_default_game_name": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_default_game_name),
+                "maphack_default_password": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_default_password),
+                "maphack_rune_design": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_rune_design),
+                "maphack_filter_blocks": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_filter_blocks),
             })
         }
     }

@@ -1,8 +1,8 @@
 package bridge
 
 import (
-	"github.com/ToddMinerTech/resurgence-launcher/d2"
-	"github.com/ToddMinerTech/resurgence-launcher/log"
+	"github.com/DoctorWoot420/resurgence-launcher/d2"
+	"github.com/DoctorWoot420/resurgence-launcher/log"
 	"github.com/therecipe/qt/core"
 )
 
@@ -43,6 +43,7 @@ func (b *DiabloBridge) Connect() {
 	b.ConnectValidateVersion(b.validateVersion)
 	b.ConnectApplyDEP(b.applyDEP)
 	b.ConnectUpdateLaunchDelay(b.updateLaunchDelay)
+	b.logger.Debug("DiabloBridgeConnect")
 }
 
 func (b *DiabloBridge) launchGame() {

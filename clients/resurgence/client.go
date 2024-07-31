@@ -31,6 +31,16 @@ func (c *Client) GetNews() (io.ReadCloser, error) {
 	return resp.Body, nil
 }
 
+// GetAvailableMaphackOptions will fetch the remote news source.
+func (c *Client) GetAvailableMaphackOptions() (io.ReadCloser, error) {
+	resp, err := http.Get(fmt.Sprintf("%s/available_maphack_options.json", c.address))
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Body, nil
+}
+
 // GetAvailableMods will fetch the remote available mods source.
 func (c *Client) GetAvailableMods() (io.ReadCloser, error) {
 	resp, err := http.Get(fmt.Sprintf("%s/available_mods_1.1.0.json", c.address))

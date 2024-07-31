@@ -13,6 +13,11 @@ const (
 	Flags
 	HDVersion
 	MaphackVersion
+	MaphackDefaultGs
+	MaphackDefaultGameName
+	MaphackDefaultPassword
+	MaphackRuneDesign
+	MaphackFilterBlocks
 )
 
 // GameModel represents a Diablo game.
@@ -29,13 +34,18 @@ type GameModel struct {
 
 func (m *GameModel) init() {
 	m.SetRoles(map[int]*core.QByteArray{
-		ID:             core.NewQByteArray2("id", -1),
-		Location:       core.NewQByteArray2("location", -1),
-		Instances:      core.NewQByteArray2("instances", -1),
-		OverrideBHCfg:  core.NewQByteArray2("override_bh_config", -1),
-		Flags:          core.NewQByteArray2("flags", -1),
-		HDVersion:      core.NewQByteArray2("hd_version", -1),
-		MaphackVersion: core.NewQByteArray2("maphack_version", -1),
+		ID:                     core.NewQByteArray2("id", -1),
+		Location:               core.NewQByteArray2("location", -1),
+		Instances:              core.NewQByteArray2("instances", -1),
+		OverrideBHCfg:          core.NewQByteArray2("override_bh_config", -1),
+		Flags:                  core.NewQByteArray2("flags", -1),
+		HDVersion:              core.NewQByteArray2("hd_version", -1),
+		MaphackVersion:         core.NewQByteArray2("maphack_version", -1),
+		MaphackDefaultGs:       core.NewQByteArray2("maphack_default_gs", -1),
+		MaphackDefaultGameName: core.NewQByteArray2("maphack_default_game_name", -1),
+		MaphackDefaultPassword: core.NewQByteArray2("maphack_default_password", -1),
+		MaphackRuneDesign:      core.NewQByteArray2("maphack_rune_design", -1),
+		MaphackFilterBlocks:    core.NewQByteArray2("maphack_filter_blocks", -1),
 	})
 
 	m.ConnectData(m.data)
@@ -83,6 +93,16 @@ func (m *GameModel) data(index *core.QModelIndex, role int) *core.QVariant {
 		return core.NewQVariant1(item.HDVersion)
 	case MaphackVersion:
 		return core.NewQVariant1(item.MaphackVersion)
+	case MaphackDefaultGs:
+		return core.NewQVariant1(item.MaphackDefaultGs)
+	case MaphackDefaultGameName:
+		return core.NewQVariant1(item.MaphackDefaultGameName)
+	case MaphackDefaultPassword:
+		return core.NewQVariant1(item.MaphackDefaultPassword)
+	case MaphackRuneDesign:
+		return core.NewQVariant1(item.MaphackRuneDesign)
+	case MaphackFilterBlocks:
+		return core.NewQVariant1(item.MaphackFilterBlocks)
 	default:
 		return core.NewQVariant()
 	}
@@ -99,7 +119,7 @@ func (m *GameModel) addGame(g *Game) {
 func (m *GameModel) updateGame(index int) {
 	var fIndex = m.Index(0, 0, core.NewQModelIndex())
 	var lIndex = m.Index(index, 0, core.NewQModelIndex())
-	m.DataChanged(fIndex, lIndex, []int{Location, Instances, OverrideBHCfg, Flags, HDVersion, MaphackVersion})
+	m.DataChanged(fIndex, lIndex, []int{Location, Instances, OverrideBHCfg, Flags, HDVersion, MaphackVersion, MaphackDefaultGs, MaphackDefaultGameName, MaphackDefaultPassword, MaphackRuneDesign, MaphackFilterBlocks})
 }
 
 func (m *GameModel) removeGame(index int) {

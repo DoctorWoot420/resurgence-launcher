@@ -3,8 +3,8 @@ package bridge
 import (
 	"encoding/json"
 
-	"github.com/ToddMinerTech/resurgence-launcher/config"
-	"github.com/ToddMinerTech/resurgence-launcher/log"
+	"github.com/DoctorWoot420/resurgence-launcher/config"
+	"github.com/DoctorWoot420/resurgence-launcher/log"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/gui"
 )
@@ -25,6 +25,9 @@ type ConfigBridge struct {
 	_ string   `property:"buildVersion"`
 	_ []string `property:"availableHDMods"`
 	_ []string `property:"availableMaphackMods"`
+	_ []string `property:"availableGameServers"`
+	_ []string `property:"availableRuneDesigns"`
+	_ []string `property:"availableFilterBlocks"`
 	_ bool     `property:"prerequisitesLoaded"`
 	_ bool     `property:"prerequisitesError"`
 
@@ -45,6 +48,7 @@ func (c *ConfigBridge) Connect() {
 	c.ConnectPersistGameModel(c.persistGameModel)
 	c.ConnectGetPrerequisites(c.getPrerequisites)
 	c.ConnectOpenConfigPath(c.openConfigPath)
+	c.logger.Debug("ConfigBridgeConnect")
 }
 
 // addGame will add a game to the game model.
@@ -54,6 +58,7 @@ func (c *ConfigBridge) addGame() {
 
 // upsertGame will update the game model.
 func (c *ConfigBridge) upsertGame(body string) bool {
+	c.logger.Debug("upsertGame")
 	var request config.UpdateGameRequest
 	if err := json.Unmarshal([]byte(body), &request); err != nil {
 		c.logger.Error(err)
@@ -79,6 +84,7 @@ func (c *ConfigBridge) deleteGame(id string) {
 
 // persistGameModel will persist the current game model to the config.
 func (c *ConfigBridge) persistGameModel() bool {
+	c.logger.Debug("persistGameModel")
 	if err := c.config.PersistGameModel(); err != nil {
 		c.logger.Error(err)
 		return false
@@ -104,6 +110,16 @@ func (c *ConfigBridge) getPrerequisites() {
 		defaultMods := []string{config.ModVersionNone}
 		c.SetAvailableHDMods(append(defaultMods, mods.HD...))
 		c.SetAvailableMaphackMods(append(defaultMods, mods.Maphack...))
+
+		maphackOptions, err := c.config.GetAvailableMaphackOptions()
+		if err != nil {
+			c.SetPrerequisitesError(true)
+			c.logger.Error(err)
+			return
+		}
+		c.SetAvailableGameServers(maphackOptions.GameServers)
+		c.SetAvailableRuneDesigns(maphackOptions.RuneDesigns)
+		c.SetAvailableFilterBlocks(maphackOptions.FilterBlocks)
 
 		c.SetPrerequisitesLoaded(true)
 	}()

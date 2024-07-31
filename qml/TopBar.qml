@@ -3,13 +3,12 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: topbar
-    height:40
+    height: 40
     property string activeMenuItem: "launch"
     property bool settingsHovered: false
     property var menuSources: { 
         "launch": "LauncherView.qml",
-        "armory": "ArmoryView.qml",
-        "discord": "CommunityView.qml"
+        "armory": "ArmoryView.qml"
     }
 
     // Main menu.
@@ -52,7 +51,7 @@ Item {
                     active: (activeMenuItem == "armory")
 
                     onClicked: function() {
-                        Qt.openUrlExternally("https://rustyshackleford1888.github.io/")
+                        Qt.openUrlExternally("https://rustyshackleford1888.github.io/armory.html")
                     }
 
                     Image {
@@ -79,7 +78,7 @@ Item {
                     active: (activeMenuItem == "discord")
 
                     onClicked: function() {
-                        Qt.openUrlExternally("https://discord.gg/hsagMy9d")
+                        Qt.openUrlExternally("https://discord.gg/WHQtvjB3pp")
                     }
 
                     Image {
@@ -135,7 +134,7 @@ Item {
         }
     }
 
-    Separator{
+    Separator {
         color: "#161616"
         anchors.bottom: parent.bottom
         height: 1 

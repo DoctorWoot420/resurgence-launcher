@@ -5,8 +5,9 @@ import (
 	"io/ioutil"
 	"sync"
 
-	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
-	"github.com/ToddMinerTech/resurgence-launcher/storage"
+	"github.com/DoctorWoot420/resurgence-launcher/clients/resurgence"
+	"github.com/DoctorWoot420/resurgence-launcher/log"
+	"github.com/DoctorWoot420/resurgence-launcher/storage"
 	"github.com/google/uuid"
 )
 
@@ -32,6 +33,9 @@ type Service interface {
 
 	// GetAvailableMods will fetch the game mode available to each D2 install.
 	GetAvailableMods() (*GameMods, error)
+
+	// GetAvailableMaphackOptions will fetch the game server names for the maphack configuration
+	GetAvailableMaphackOptions() (*MaphackOptions, error)
 }
 
 type service struct {
@@ -39,6 +43,7 @@ type service struct {
 	store            storage.Store
 	gameModel        *GameModel
 	mutex            sync.Mutex
+	logger           log.Logger
 }
 
 // Read will read the configuration and return it.
@@ -69,19 +74,29 @@ func (s *service) AddGame() {
 	g.Flags = []string{"-3dfx", "-skiptobnet"}
 	g.HDVersion = "3.0"
 	g.MaphackVersion = "default"
+	g.MaphackDefaultGs = "GS1 - New York"
+	g.MaphackDefaultGameName = ""
+	g.MaphackDefaultPassword = ""
+	g.MaphackRuneDesign = "Cosmic Rainbow"
+	g.MaphackFilterBlocks = []string{"leveling", "sorceress"}
 
 	s.gameModel.AddGame(g)
 }
 
 // UpdateGameRequest is the data used to update a game in the game model.
 type UpdateGameRequest struct {
-	ID             string   `json:"id"`
-	Location       string   `json:"location"`
-	Instances      int      `json:"instances"`
-	OverrideBHCfg  bool     `json:"override_bh_cfg"`
-	Flags          []string `json:"flags"`
-	HDVersion      string   `json:"hd_version"`
-	MaphackVersion string   `json:"maphack_version"`
+	ID                     string   `json:"id"`
+	Location               string   `json:"location"`
+	Instances              int      `json:"instances"`
+	OverrideBHCfg          bool     `json:"override_bh_cfg"`
+	Flags                  []string `json:"flags"`
+	HDVersion              string   `json:"hd_version"`
+	MaphackVersion         string   `json:"maphack_version"`
+	MaphackDefaultGs       string   `json:"maphack_default_gs"`
+	MaphackDefaultGameName string   `json:"maphack_default_game_name"`
+	MaphackDefaultPassword string   `json:"maphack_default_password"`
+	MaphackRuneDesign      string   `json:"maphack_rune_design"`
+	MaphackFilterBlocks    []string `json:"maphack_filter_blocks"`
 }
 
 // UpsertGame will upsert the game to the config.
@@ -104,8 +119,15 @@ func (s *service) UpsertGame(request UpdateGameRequest) error {
 			games[i].Flags = request.Flags
 			games[i].HDVersion = request.HDVersion
 			games[i].MaphackVersion = request.MaphackVersion
+			games[i].MaphackDefaultGs = request.MaphackDefaultGs
+			games[i].MaphackDefaultGameName = request.MaphackDefaultGameName
+			games[i].MaphackDefaultPassword = request.MaphackDefaultPassword
+			games[i].MaphackRuneDesign = request.MaphackRuneDesign
+			games[i].MaphackFilterBlocks = request.MaphackFilterBlocks
 		}
 	}
+
+	s.logger.Debug(("config/service.go UpsertGame     request.MaphackDefaultGameName=" + request.MaphackDefaultGameName + "  and request.MaphackDefaultGs=" + request.MaphackDefaultGs))
 
 	// Notify the UI of the change.
 	s.gameModel.updateGame(updatedIndex)
@@ -168,13 +190,18 @@ func (s *service) PersistGameModel() error {
 	// Go through all games and populate a config slice.
 	for i := 0; i < len(games); i++ {
 		conf.Games = append(conf.Games, storage.Game{
-			ID:             games[i].ID,
-			Location:       games[i].Location,
-			Instances:      games[i].Instances,
-			OverrideBHCfg:  games[i].OverrideBHCfg,
-			Flags:          games[i].Flags,
-			HDVersion:      games[i].HDVersion,
-			MaphackVersion: games[i].MaphackVersion,
+			OverrideBHCfg:          games[i].OverrideBHCfg,
+			ID:                     games[i].ID,
+			Location:               games[i].Location,
+			Instances:              games[i].Instances,
+			Flags:                  games[i].Flags,
+			HDVersion:              games[i].HDVersion,
+			MaphackVersion:         games[i].MaphackVersion,
+			MaphackDefaultGs:       games[i].MaphackDefaultGs,
+			MaphackDefaultGameName: games[i].MaphackDefaultGameName,
+			MaphackDefaultPassword: games[i].MaphackDefaultPassword,
+			MaphackRuneDesign:      games[i].MaphackRuneDesign,
+			MaphackFilterBlocks:    games[i].MaphackFilterBlocks,
 		})
 	}
 
@@ -224,15 +251,37 @@ func (s *service) GetAvailableMods() (*GameMods, error) {
 	return &gameMods, nil
 }
 
+// GetAvailableMaphackOptions will get available mods from the Resurgence API.
+func (s *service) GetAvailableMaphackOptions() (*MaphackOptions, error) {
+	contents, err := s.resurgenceClient.GetAvailableMaphackOptions()
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := ioutil.ReadAll(contents)
+	if err != nil {
+		return nil, err
+	}
+
+	var maphackOptions MaphackOptions
+	if err := json.Unmarshal(bytes, &maphackOptions); err != nil {
+		return nil, err
+	}
+
+	return &maphackOptions, nil
+}
+
 // NewService returns a service with all the dependencies.
 func NewService(
 	resurgenceClient resurgence.Client,
 	store storage.Store,
 	gameModel *GameModel,
+	logger log.Logger,
 ) Service {
 	return &service{
 		resurgenceClient: resurgenceClient,
 		store:            store,
 		gameModel:        gameModel,
+		logger:           logger,
 	}
 }

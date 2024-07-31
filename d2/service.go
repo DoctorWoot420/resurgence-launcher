@@ -11,10 +11,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
-	"github.com/ToddMinerTech/resurgence-launcher/config"
-	"github.com/ToddMinerTech/resurgence-launcher/log"
-	"github.com/ToddMinerTech/resurgence-launcher/storage"
+	"github.com/DoctorWoot420/resurgence-launcher/clients/resurgence"
+	"github.com/DoctorWoot420/resurgence-launcher/config"
+	"github.com/DoctorWoot420/resurgence-launcher/log"
+	"github.com/DoctorWoot420/resurgence-launcher/storage"
 )
 
 // Service is responsible for all things related to the Resurgence ladder.
@@ -37,14 +37,15 @@ type Service interface {
 
 // Service is responsible for all things related to Diablo II.
 type service struct {
-	resurgenceClient resurgence.Client
-	configService    config.Service
-	logger           log.Logger
-	gameStates       chan execState
-	availableMods    *config.GameMods
-	runningGames     []game
-	mux              sync.Mutex
-	patchFileModel   *FileModel
+	resurgenceClient        resurgence.Client
+	configService           config.Service
+	logger                  log.Logger
+	gameStates              chan execState
+	availableMods           *config.GameMods
+	availableMaphackOptions *config.MaphackOptions
+	runningGames            []game
+	mux                     sync.Mutex
+	patchFileModel          *FileModel
 }
 
 type game struct {
@@ -55,6 +56,11 @@ type game struct {
 type execState struct {
 	pid *int
 	err error
+}
+
+// bhconfigResponse represents a text repsponse of a complete bh.cfg file
+type bhconfigResponse struct {
+	ConfigText []string `json:"config_text"`
 }
 
 // defaultLaunchDelay is used if a launch delay hasn't been set by a user.
@@ -129,6 +135,34 @@ func (s *service) getAvailableMods() (*config.GameMods, error) {
 	s.availableMods = &gameMods
 
 	return s.availableMods, nil
+}
+
+func (s *service) GetAvailableMaphackOptions() (*config.MaphackOptions, error) {
+	// Return cached available mods.
+	if s.availableMaphackOptions != nil {
+		return s.availableMaphackOptions, nil
+	}
+
+	// No cached mods exist, fetch remote mods.
+	contents, err := s.resurgenceClient.GetAvailableMaphackOptions()
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := ioutil.ReadAll(contents)
+	if err != nil {
+		return nil, err
+	}
+
+	var maphackOptions config.MaphackOptions
+	if err := json.Unmarshal(bytes, &maphackOptions); err != nil {
+		return nil, err
+	}
+
+	// Set cache.
+	s.availableMaphackOptions = &maphackOptions
+
+	return s.availableMaphackOptions, nil
 }
 
 // ValidateGameVersions will check if the games are up to date.

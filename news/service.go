@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/ToddMinerTech/resurgence-launcher/clients/resurgence"
+	"github.com/DoctorWoot420/resurgence-launcher/clients/resurgence"
 )
 
 // Service is responsible for all things related to the news.

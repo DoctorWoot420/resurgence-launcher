@@ -1,4 +1,4 @@
-module github.com/ToddMinerTech/resurgence-launcher
+module github.com/DoctorWoot420/resurgence-launcher
 
 go 1.18
 
