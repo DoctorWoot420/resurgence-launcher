@@ -78,7 +78,7 @@ func (s *service) AddGame() {
 	g.MaphackDefaultGameName = ""
 	g.MaphackDefaultPassword = ""
 	g.MaphackRuneDesign = "Classic"
-	g.MaphackFilterBlocks = []string{"leveling", "amazon", "assassin", "barbarian", "druid", "necro", "paladin", "sorceress"}
+	g.MaphackFilterBlocks = []string{"leveling", "amazon", "assassin", "barbarian", "druid", "necromancer", "paladin", "sorceress"}
 
 	s.gameModel.AddGame(g)
 }
