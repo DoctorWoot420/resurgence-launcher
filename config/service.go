@@ -77,8 +77,8 @@ func (s *service) AddGame() {
 	g.MaphackDefaultGs = "GS1 - New York"
 	g.MaphackDefaultGameName = ""
 	g.MaphackDefaultPassword = ""
-	g.MaphackRuneDesign = "Cosmic Rainbow"
-	g.MaphackFilterBlocks = []string{"leveling", "sorceress"}
+	g.MaphackRuneDesign = "Classic"
+	g.MaphackFilterBlocks = []string{"leveling", "amazon", "assassin", "barbarian", "druid", "necro", "paladin", "sorceress"}
 
 	s.gameModel.AddGame(g)
 }
