@@ -7,9 +7,9 @@
 This project is a launcher for Diablo II Resurgence. It was built to help new players install patches, updating registries and help with other technical issues to lower the barrier of entry into the Resurgence community, while also assisting more experienced players with more advanced settings such as HD mods and launching multiple boxes.  This project is a copy-paste of Nokka's SlashDiablo launcher with a few additions.
 
 ## Installing
-If you want to use the launcher and play, grab the msi from the latest version on the [releases page]([url](https://github.com/DoctorWoot420/resurgence-launcher/releases)).
+If you want to use the launcher and play, grab the msi from the latest version on the [releases page](https://github.com/DoctorWoot420/resurgence-launcher/releases).
 
-For any qustions about using or installing see the [Resurgence Launcher FAQs]([url](https://diablo2resurgence.fandom.com/wiki/Resurgence_Launcher_FAQs)) wiki page.
+For any questions about using or installing, see the [Resurgence Launcher FAQs](https://diablo2resurgence.fandom.com/wiki/Resurgence_Launcher_FAQs) wiki page.
 
 ## Important credits
 
