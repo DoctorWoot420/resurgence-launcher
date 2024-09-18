@@ -192,15 +192,15 @@ func mergeContent(newContent, customLines string) string {
 
 func updateConfigLine(content, key, value string) string {
 	lines := strings.Split(content, "\n")
-	keyPattern := regexp.MustCompile(`^` + key + `\s*=`)
+	keyPattern := regexp.MustCompile(`^` + regexp.QuoteMeta(key) + `\s*:`)
 	found := false
 
 	for i, line := range lines {
 		if keyPattern.MatchString(line) {
 			if value == "" {
-				lines[i] = key + " = "
+				lines[i] = key + ":"
 			} else {
-				lines[i] = key + " = " + value
+				lines[i] = key + ": " + value
 			}
 			found = true
 			break
@@ -208,7 +208,7 @@ func updateConfigLine(content, key, value string) string {
 	}
 
 	if !found && value != "" {
-		newLine := key + " = " + value
+		newLine := key + ": " + value
 		lines = append(lines, newLine)
 	}
 

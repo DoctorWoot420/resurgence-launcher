@@ -814,7 +814,6 @@ Item {
                             
                             Separator{}
                         }
-
                         
                         // Apply custom maphack settings
                         Item {
@@ -873,37 +872,86 @@ Item {
                             Separator{}
                         }
 
-                        // DEP success message.
-                        Rectangle {
-                            visible: depApplied
-                            width: parent.width
-                            height: parent.height
-                            color: "#00632e"
-                            border.width: 1
-                            border.color: "#000000"
+                        // Dep fix.
+                        Item {
+                            Layout.preferredWidth: settingsLayout.width
+                            Layout.preferredHeight: boxHeight
 
-                            SText {
-                                text: "DEP fix successfully applied - don't forget to reboot!"
-                                font.pixelSize: 11
-                                anchors.centerIn: parent
-                                color: "#ffffff"
+                            Row {
+                                topPadding: 10
+
+                                Column {
+                                    width: (settingsLayout.width - depFixButton.width)
+                                    Title {
+                                        text: "DISABLE DEP"
+                                        font.pixelSize: 13
+                                    }
+
+                                    SText {
+                                        text: "Run if this install gets Access Violation (C0000005) error - requires reboot"
+                                        font.pixelSize: 11
+                                        topPadding: 5
+                                        color: "#676767"
+                                    }
+                                }
+                                Column {
+                                    id: depFixButton
+                                    width: 100
+                                    
+                                    PlainButton {
+                                        width: 100
+                                        height: 40
+                                        label: "Run"
+
+                                        onClicked: {
+                                            var success = diablo.applyDEP(d2pathInput.text)
+
+                                            if(success) {
+                                                depApplied = true
+                                                // Remove message after a timeout.
+                                                depAppliedTimer.restart()
+                                            } else {
+                                                depError = true
+                                                // Remove message after a timeout.
+                                                depErrorTimer.restart()
+                                            }
+                                        }
+                                    }
+                                } 
                             }
-                        }
 
-                        // DEP error message.
-                        Rectangle {
-                            visible: depError
-                            width: parent.width
-                            height: parent.height
-                            color: "#8f3131"
-                            border.width: 1
-                            border.color: "#000000"
+                            // DEP success message.
+                            Rectangle {
+                                visible: depApplied
+                                width: parent.width
+                                height: parent.height
+                                color: "#00632e"
+                                border.width: 1
+                                border.color: "#000000"
 
-                            SText {
-                                text: "There was an error while applying DEP, please try again!"
-                                font.pixelSize: 11
-                                anchors.centerIn: parent
-                                color: "#ffffff"
+                                SText {
+                                    text: "DEP fix successfully applied - don't forget to reboot!"
+                                    font.pixelSize: 11
+                                    anchors.centerIn: parent
+                                    color: "#ffffff"
+                                }
+                            }
+
+                            // DEP error message.
+                            Rectangle {
+                                visible: depError
+                                width: parent.width
+                                height: parent.height
+                                color: "#8f3131"
+                                border.width: 1
+                                border.color: "#000000"
+
+                                SText {
+                                    text: "There was an error while applying DEP, please try again!"
+                                    font.pixelSize: 11
+                                    anchors.centerIn: parent
+                                    color: "#ffffff"
+                                }
                             }
                         }
                     }
