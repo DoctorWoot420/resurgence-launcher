@@ -33,6 +33,23 @@ This project distributes the work of many folk in the community, primary credits
 
 ## Development
 
+### Maintenance Notes
+Raw notes to get started:
+
+- News - managed via github repo that hosts github pages patch server -patchd2-lod/files/news.json
+- D2 Patch Files - managed via patch server in patchd2-lod/files/current (or 1.13c for base files)
+- SGD2+D2GL / HD - managed via patch server in patchd2-lod/files/maphack_3.0 - maphack versions available managed in available-mods.json
+- BH / Maphack - same as HD for the base files - maphack configurator is a seperate piece of functionality that will copy files over the top of the basic config from the patch server.  Need to periodically update the basic config on patch server manually for now.
+- 
+Note that the configurator has 2 key parts: the BH.cfg API endpoint and the local replacement of both BH.cfg and BH_settings.cfg.  API endpoint provides a complete config, but the launcher has code to replace everything outside of the custom blocks.  Then the game/server/gs inputs are only used to update/insert these config lines into BH_settings.cfg.
+
+- Patch server repo https://github.com/d2resurgence/d2resurgence.github.io
+- Test patch server repo with workflows & files - https://github.com/DoctorWoot420/resurgence-patch-test - edit your resurgence client go file to change the url to the pages url of this repo to test
+- Resurgence BH Genefator - https://github.com/DoctorWoot420/resurgence-bh-generator
+- Bh config repo - https://github.com/doctorWoot420/cosmic-resurgence-bh/
+- Bh dll repo - https://github.com/rustyShackleford1888/slashdiablo-maphack
+  
+
 ### Go
 
 Install Go 1.12 or higher by following [install instructions](http://golang.org/doc/install.html) for your OS.
