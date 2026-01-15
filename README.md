@@ -228,3 +228,8 @@ $manifest = @{
 $manifest | ConvertTo-Json -Depth 100 | Set-Content -Path 'manifest.json'
 
 
+# Releasing an MSI
+I think you can use any general process, I downloaded Advanced Installer @ https://www.advancedinstaller.com/
+
+
+
