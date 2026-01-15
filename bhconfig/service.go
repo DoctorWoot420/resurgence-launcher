@@ -55,6 +55,7 @@ func (s *service) SetMaphackTextData(gameIndex int) error {
 		DefaultGameName: g.MaphackDefaultGameName,
 		DefaultPassword: g.MaphackDefaultPassword,
 		RuneDesign:      g.MaphackRuneDesign,
+		ItemNameOption:  g.MaphackItemNameOption,
 		FilterBlocks:    g.MaphackFilterBlocks,
 	}
 

@@ -22,5 +22,6 @@ type Game struct {
 	MaphackDefaultGameName string   `json:"maphack_default_game_name"`
 	MaphackDefaultPassword string   `json:"maphack_default_password"`
 	MaphackRuneDesign      string   `json:"maphack_rune_design"`
+	MaphackItemNameOption  string   `json:"maphack_item_name_option"`
 	MaphackFilterBlocks    []string `json:"maphack_filter_blocks"`
 }

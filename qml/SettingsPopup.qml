@@ -21,8 +21,10 @@ Popup {
         "maphack_default_gs": 384,
         "maphack_default_game_name": 512,
         "maphack_default_password": 768,
+        // Role values must match config/game_model.go (UserRole + 1<<iota)
         "maphack_rune_design": 1280,
-        "maphack_filter_blocks": 2304
+        "maphack_item_name_option": 2304,
+        "maphack_filter_blocks": 4352
     }
 
     modal: true
@@ -454,6 +456,7 @@ Popup {
                 "maphack_default_game_name": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_default_game_name),
                 "maphack_default_password": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_default_password),
                 "maphack_rune_design": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_rune_design),
+                "maphack_item_name_option": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_item_name_option),
                 "maphack_filter_blocks": model.data(model.index(gamesList.currentIndex, 0), gameRoles.maphack_filter_blocks),
             })
         }

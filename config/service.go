@@ -78,6 +78,7 @@ func (s *service) AddGame() {
 	g.MaphackDefaultGameName = ""
 	g.MaphackDefaultPassword = ""
 	g.MaphackRuneDesign = "Classic"
+	g.MaphackItemNameOption = "Default"
 	g.MaphackFilterBlocks = []string{"leveling", "amazon", "assassin", "barbarian", "druid", "necromancer", "paladin", "sorceress"}
 
 	s.gameModel.AddGame(g)
@@ -96,6 +97,7 @@ type UpdateGameRequest struct {
 	MaphackDefaultGameName string   `json:"maphack_default_game_name"`
 	MaphackDefaultPassword string   `json:"maphack_default_password"`
 	MaphackRuneDesign      string   `json:"maphack_rune_design"`
+	MaphackItemNameOption  string   `json:"maphack_item_name_option"`
 	MaphackFilterBlocks    []string `json:"maphack_filter_blocks"`
 }
 
@@ -123,6 +125,7 @@ func (s *service) UpsertGame(request UpdateGameRequest) error {
 			games[i].MaphackDefaultGameName = request.MaphackDefaultGameName
 			games[i].MaphackDefaultPassword = request.MaphackDefaultPassword
 			games[i].MaphackRuneDesign = request.MaphackRuneDesign
+			games[i].MaphackItemNameOption = request.MaphackItemNameOption
 			games[i].MaphackFilterBlocks = request.MaphackFilterBlocks
 		}
 	}
@@ -201,6 +204,7 @@ func (s *service) PersistGameModel() error {
 			MaphackDefaultGameName: games[i].MaphackDefaultGameName,
 			MaphackDefaultPassword: games[i].MaphackDefaultPassword,
 			MaphackRuneDesign:      games[i].MaphackRuneDesign,
+			MaphackItemNameOption:  games[i].MaphackItemNameOption,
 			MaphackFilterBlocks:    games[i].MaphackFilterBlocks,
 		})
 	}

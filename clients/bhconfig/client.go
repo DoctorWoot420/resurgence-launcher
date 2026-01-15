@@ -21,6 +21,7 @@ type Payload struct {
 	DefaultGameName string   `json:"default_game_name"`
 	DefaultPassword string   `json:"default_password"`
 	RuneDesign      string   `json:"rune_design"`
+	ItemNameOption  string   `json:"item_name_option"`
 	FilterBlocks    []string `json:"filter_blocks"`
 }
 

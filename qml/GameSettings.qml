@@ -13,6 +13,7 @@ Item {
     property string activeMaphackDefaultGameName: ""
     property string activeMaphackDefaultPassword: ""
     property int activeMaphackRuneDesignIndex: 0
+    property int activeMaphackItemNameOptionIndex: 0
     property int boxHeight: 58
 
     function setGame(current) {
@@ -32,6 +33,7 @@ Item {
         updateMaphackDefaultGameName(current)
         updateMaphackDefaultPassword(current)
         updateMaphackRuneDesign(current)
+        updateMaphackItemNameOption(current)
         updateMaphackFilterBlocks(current)
     }
 
@@ -129,6 +131,24 @@ Item {
         maphackRuneDesign.currentIndex = 0
     }
 
+    // updateMaphackItemNameOption will set the correct index of the item name options
+    function updateMaphackItemNameOption(current) {
+        if(settings.availableItemNameOptions.length > 0) {
+            // Find the correct index.
+            for(var i = 0; i < settings.availableItemNameOptions.length; i++) {
+                if(settings.availableItemNameOptions[i].toLowerCase() == current.maphack_item_name_option.toLowerCase()) {
+                    activeMaphackItemNameOptionIndex = i
+                    maphackItemNameOption.currentIndex = i
+                    return
+                }
+            }
+        }
+
+        // Default to first index in list.
+        activeMaphackItemNameOptionIndex = 0
+        maphackItemNameOption.currentIndex = 0
+    }
+
     // updateMaphackFilterBlocks will set the correct values of the filter blocks
     function updateMaphackFilterBlocks(current) {
         if(current.maphack_filter_blocks != null) {
@@ -224,6 +244,7 @@ Item {
                 maphack_default_game_name: maphackDefaultGameName.text,
                 maphack_default_password: maphackDefaultPassword.text,
                 maphack_rune_design: maphackRuneDesign.currentText,
+                maphack_item_name_option: maphackItemNameOption.currentText,
                 maphack_filter_blocks: makeBlockList(),
             }
             
@@ -703,6 +724,47 @@ Item {
                                         id: maphackRuneDesign
                                         currentIndex: activeMaphackRuneDesignIndex
                                         model: settings.availableRuneDesigns
+                                        height: 30
+                                        width: 140
+
+                                        onActivated: updateGameModel()
+                                    }
+                                } 
+                            }
+                            
+                            Separator{}
+                        }
+
+                        // Item Names Dropdown
+                        Item {
+                            Layout.preferredWidth: settingsLayout.width
+                            Layout.preferredHeight: boxHeight
+
+                            Row {
+                                topPadding: 10
+
+                                Column {
+                                    width: (settingsLayout.width - includeMaphackItemNameOption.width)
+                                    Title {
+                                        text: "ITEM NAMES"
+                                        font.pixelSize: 13
+                                    }
+
+                                    SText {
+                                        text: "Replace item names with key stats"
+                                        font.pixelSize: 11
+                                        topPadding: 5
+                                        color: "#676767"
+                                    }
+                                }
+                                Column {
+                                    id: includeMaphackItemNameOption
+                                    width: 140
+
+                                    Dropdown{
+                                        id: maphackItemNameOption
+                                        currentIndex: activeMaphackItemNameOptionIndex
+                                        model: settings.availableItemNameOptions
                                         height: 30
                                         width: 140
 

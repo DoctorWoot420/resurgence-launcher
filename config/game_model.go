@@ -17,6 +17,7 @@ const (
 	MaphackDefaultGameName
 	MaphackDefaultPassword
 	MaphackRuneDesign
+	MaphackItemNameOption
 	MaphackFilterBlocks
 )
 
@@ -45,6 +46,7 @@ func (m *GameModel) init() {
 		MaphackDefaultGameName: core.NewQByteArray2("maphack_default_game_name", -1),
 		MaphackDefaultPassword: core.NewQByteArray2("maphack_default_password", -1),
 		MaphackRuneDesign:      core.NewQByteArray2("maphack_rune_design", -1),
+		MaphackItemNameOption:  core.NewQByteArray2("maphack_item_name_option", -1),
 		MaphackFilterBlocks:    core.NewQByteArray2("maphack_filter_blocks", -1),
 	})
 
@@ -101,6 +103,8 @@ func (m *GameModel) data(index *core.QModelIndex, role int) *core.QVariant {
 		return core.NewQVariant1(item.MaphackDefaultPassword)
 	case MaphackRuneDesign:
 		return core.NewQVariant1(item.MaphackRuneDesign)
+	case MaphackItemNameOption:
+		return core.NewQVariant1(item.MaphackItemNameOption)
 	case MaphackFilterBlocks:
 		return core.NewQVariant1(item.MaphackFilterBlocks)
 	default:
@@ -119,7 +123,7 @@ func (m *GameModel) addGame(g *Game) {
 func (m *GameModel) updateGame(index int) {
 	var fIndex = m.Index(0, 0, core.NewQModelIndex())
 	var lIndex = m.Index(index, 0, core.NewQModelIndex())
-	m.DataChanged(fIndex, lIndex, []int{Location, Instances, OverrideBHCfg, Flags, HDVersion, MaphackVersion, MaphackDefaultGs, MaphackDefaultGameName, MaphackDefaultPassword, MaphackRuneDesign, MaphackFilterBlocks})
+	m.DataChanged(fIndex, lIndex, []int{Location, Instances, OverrideBHCfg, Flags, HDVersion, MaphackVersion, MaphackDefaultGs, MaphackDefaultGameName, MaphackDefaultPassword, MaphackRuneDesign, MaphackItemNameOption, MaphackFilterBlocks})
 }
 
 func (m *GameModel) removeGame(index int) {

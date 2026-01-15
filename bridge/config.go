@@ -27,6 +27,7 @@ type ConfigBridge struct {
 	_ []string `property:"availableMaphackMods"`
 	_ []string `property:"availableGameServers"`
 	_ []string `property:"availableRuneDesigns"`
+	_ []string `property:"availableItemNameOptions"`
 	_ []string `property:"availableFilterBlocks"`
 	_ bool     `property:"prerequisitesLoaded"`
 	_ bool     `property:"prerequisitesError"`
@@ -119,6 +120,7 @@ func (c *ConfigBridge) getPrerequisites() {
 		}
 		c.SetAvailableGameServers(maphackOptions.GameServers)
 		c.SetAvailableRuneDesigns(maphackOptions.RuneDesigns)
+		c.SetAvailableItemNameOptions(maphackOptions.ItemNameOptions)
 		c.SetAvailableFilterBlocks(maphackOptions.FilterBlocks)
 
 		c.SetPrerequisitesLoaded(true)
