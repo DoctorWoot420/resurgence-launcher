@@ -5,7 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/DoctorWoot420/resurgence-launcher/log"
 )
@@ -50,6 +53,48 @@ func (c *Client) GetMaphackTextFromParams(maphackConfigParams Payload) (io.ReadC
 	c.logger.Debug("clients/bhconfig/client.go Successful response from server")
 
 	return resp.Body, nil
+}
+
+const filterSourceSHAURL = "https://api.github.com/repos/DoctorWoot420/cosmic-resurgence-bh/commits/main"
+
+// GetFilterSourceSHA returns the current main commit SHA of the BH filter source repo.
+func (c *Client) GetFilterSourceSHA() (string, error) {
+	c.logger.Debug("clients/bhconfig/client.go start GetFilterSourceSHA")
+
+	req, err := http.NewRequest(http.MethodGet, filterSourceSHAURL, nil)
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Accept", "application/vnd.github.sha")
+	req.Header.Set("User-Agent", "resurgence-launcher")
+
+	httpClient := &http.Client{Timeout: 5 * time.Second}
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	sha := strings.TrimSpace(string(body))
+	if strings.HasPrefix(sha, "{") {
+		var payload struct {
+			SHA string `json:"sha"`
+		}
+		if err := json.Unmarshal(body, &payload); err == nil {
+			sha = strings.TrimSpace(payload.SHA)
+		}
+	}
+	if resp.StatusCode != http.StatusOK || len(sha) < 7 {
+		return "", fmt.Errorf("unexpected filter source sha response (%d): %s", resp.StatusCode, sha)
+	}
+
+	c.logger.Debug("clients/bhconfig/client.go filter source sha=" + sha)
+	return sha, nil
 }
 
 // NewClient returns a new client with all dependencies setup.

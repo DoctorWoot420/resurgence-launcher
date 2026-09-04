@@ -51,7 +51,7 @@ Item {
                     active: (activeMenuItem == "armory")
 
                     onClicked: function() {
-                        Qt.openUrlExternally("https://rustyshackleford1888.github.io/armory.html")
+                        Qt.openUrlExternally("https://d2resurgencearmory.com/")
                     }
 
                     Image {

@@ -1,21 +1,33 @@
 package bhconfig
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/DoctorWoot420/resurgence-launcher/clients/bhconfig"
 	"github.com/DoctorWoot420/resurgence-launcher/config"
 	"github.com/DoctorWoot420/resurgence-launcher/log"
+	"github.com/DoctorWoot420/resurgence-launcher/storage"
 )
+
+type bhSyncCache struct {
+	ParamsHash string `json:"params_hash"`
+	SourceSHA  string `json:"source_sha"`
+}
+
+type ProgressFunc func(message string, progress float32)
 
 type Service interface {
 	SetMaphackTextData(gameIndex int) error
+	SyncMaphackConfigsIfChanged(status ProgressFunc) (updated bool, err error)
 }
 
 type service struct {
@@ -47,46 +59,190 @@ func (s *service) SetMaphackTextData(gameIndex int) error {
 		return err
 	}
 
-	g := conf.Games[gameIndex]
+	if gameIndex < 0 || gameIndex >= len(conf.Games) {
+		return fmt.Errorf("invalid game index: %d", gameIndex)
+	}
+
+	_, err = s.applyGameMaphackConfig(conf.Games[gameIndex], true, s.currentFilterSourceSHA(), nil)
+	return err
+}
+
+func (s *service) SyncMaphackConfigsIfChanged(status ProgressFunc) (bool, error) {
+	s.logger.Debug("bhconfig/service.go start SyncMaphackConfigsIfChanged")
+
+	games, err := s.eligibleMaphackGames()
+	if err != nil {
+		return false, err
+	}
+	if len(games) == 0 {
+		return false, nil
+	}
+
+	sourceSHA := s.currentFilterSourceSHA()
+
+	var updated bool
+	var syncErr error
+	for i, g := range games {
+		changed, err := s.applyGameMaphackConfig(g, false, sourceSHA, func() {
+			if status != nil {
+				progress := 0.2 + (float32(i) / float32(len(games)) * 0.7)
+				status("Downloading new BH.cfg...", progress)
+			}
+		})
+		if err != nil {
+			s.logger.Debug(fmt.Sprintf("Failed to sync BH.cfg for game %s: %v", g.ID, err))
+			if syncErr == nil {
+				syncErr = err
+			}
+			continue
+		}
+		if changed {
+			updated = true
+			if status != nil {
+				status("Updating BH.cfg...", 0.9)
+			}
+		}
+	}
+
+	if updated && status != nil {
+		status("Updated BH.cfg", 1)
+	}
+
+	return updated, syncErr
+}
+
+func (s *service) eligibleMaphackGames() ([]storage.Game, error) {
+	conf, err := s.configService.Read()
+	if err != nil {
+		s.logger.Debug("Failed to read data from configService")
+		return nil, err
+	}
+
+	var games []storage.Game
+	for _, g := range conf.Games {
+		if g.Location == "" || g.OverrideBHCfg {
+			continue
+		}
+		if g.MaphackVersion == "" || g.MaphackVersion == config.ModVersionNone {
+			continue
+		}
+		games = append(games, g)
+	}
+
+	return games, nil
+}
+
+func (s *service) currentFilterSourceSHA() string {
+	sha, err := s.client.GetFilterSourceSHA()
+	if err != nil {
+		s.logger.Debug(fmt.Sprintf("Failed to get filter source sha: %v", err))
+		return ""
+	}
+	return sha
+}
+
+func (s *service) applyGameMaphackConfig(g storage.Game, forceDownload bool, sourceSHA string, onDownload func()) (bool, error) {
 	s.logger.Debug(fmt.Sprintf("Game settings: %+v", g))
+
+	itemNameOption := g.MaphackItemNameOption
+	if itemNameOption == "" {
+		itemNameOption = "Default"
+	}
 
 	maphackConfigParams := bhconfig.Payload{
 		DefaultGs:       g.MaphackDefaultGs,
 		DefaultGameName: g.MaphackDefaultGameName,
 		DefaultPassword: g.MaphackDefaultPassword,
 		RuneDesign:      g.MaphackRuneDesign,
-		ItemNameOption:  g.MaphackItemNameOption,
+		ItemNameOption:  itemNameOption,
 		FilterBlocks:    g.MaphackFilterBlocks,
 	}
 
 	s.logger.Debug(fmt.Sprintf("Maphack config params: %+v", maphackConfigParams))
 
+	paramsHash := bhCfgParamsHash(maphackConfigParams)
+	cache := readSyncCache(g.Location)
+	paramsMatch := cache.ParamsHash == paramsHash
+	sourceMatch := sourceSHA != "" && cache.SourceSHA == sourceSHA
+	if !forceDownload && localBHExists(g.Location) && paramsMatch && (sourceMatch || sourceSHA == "") {
+		s.logger.Debug("BH.cfg source and params unchanged, skipping download")
+		settingsUpdated, err := s.updateBHSettings(g.Location, maphackConfigParams)
+		return settingsUpdated, err
+	}
+
+	if onDownload != nil {
+		onDownload()
+	}
+
 	contents, err := s.client.GetMaphackTextFromParams(maphackConfigParams)
 	if err != nil {
 		s.logger.Debug("Failed to get maphack text from params")
-		return err
+		return false, err
 	}
+	defer contents.Close()
 
 	bytes, err := ioutil.ReadAll(contents)
 	if err != nil {
 		s.logger.Debug("Failed to read response contents")
-		return err
+		return false, err
 	}
 
-	if err := s.updateBHConfig(g.Location, bytes); err != nil {
+	bhUpdated, err := s.updateBHConfig(g.Location, bytes)
+	if err != nil {
 		s.logger.Debug("Failed to update BH.cfg")
-		return err
+		return false, err
 	}
 
-	if err := s.updateBHSettings(g.Location, maphackConfigParams); err != nil {
+	if sourceSHA == "" {
+		sourceSHA = cache.SourceSHA
+	}
+	writeSyncCache(g.Location, paramsHash, sourceSHA)
+
+	settingsUpdated, err := s.updateBHSettings(g.Location, maphackConfigParams)
+	if err != nil {
 		s.logger.Debug("Failed to update BH_settings.cfg")
-		return err
+		return bhUpdated, err
 	}
 
-	return nil
+	return bhUpdated || settingsUpdated, nil
 }
 
-func (s *service) updateBHConfig(location string, bytes []byte) error {
+func bhCfgParamsHash(params bhconfig.Payload) string {
+	blocks := append([]string(nil), params.FilterBlocks...)
+	sort.Strings(blocks)
+	raw := strings.Join([]string{params.RuneDesign, params.ItemNameOption, strings.Join(blocks, ",")}, "\n")
+	sum := sha256.Sum256([]byte(raw))
+	return hex.EncodeToString(sum[:])
+}
+
+func syncCachePath(location string) string {
+	return filepath.Join(cleanLocation(location), "bh.cfg.sync")
+}
+
+func localBHExists(location string) bool {
+	_, err := os.Stat(filepath.Join(cleanLocation(location), "bh.cfg"))
+	return err == nil
+}
+
+func readSyncCache(location string) bhSyncCache {
+	var cache bhSyncCache
+	data, err := ioutil.ReadFile(syncCachePath(location))
+	if err != nil {
+		return cache
+	}
+	_ = json.Unmarshal(data, &cache)
+	return cache
+}
+
+func writeSyncCache(location string, paramsHash string, sourceSHA string) {
+	data, err := json.Marshal(bhSyncCache{ParamsHash: paramsHash, SourceSHA: sourceSHA})
+	if err != nil {
+		return
+	}
+	_ = ioutil.WriteFile(syncCachePath(location), data, 0644)
+}
+
+func (s *service) updateBHConfig(location string, bytes []byte) (bool, error) {
 	s.logger.Debug("Start updateBHConfig")
 
 	location = cleanLocation(location)
@@ -94,19 +250,19 @@ func (s *service) updateBHConfig(location string, bytes []byte) error {
 
 	if err := os.MkdirAll(filepath.Dir(filePath), 0755); err != nil {
 		s.logger.Debug(fmt.Sprintf("Failed to create directories: %v", err))
-		return err
+		return false, err
 	}
 
 	var jsonData map[string]string
 	if err := json.Unmarshal(bytes, &jsonData); err != nil {
 		s.logger.Debug(fmt.Sprintf("Failed to unmarshal JSON: %v", err))
 		s.logger.Debug(fmt.Sprintf("Raw JSON data: %s", string(bytes))) // Output the raw JSON
-		return err
+		return false, err
 	}
 
 	configContent, ok := jsonData["config"]
 	if !ok {
-		return fmt.Errorf("config field not found in the JSON data: %s", string(bytes)) // Output the full JSON
+		return false, fmt.Errorf("config field not found in the JSON data: %s", string(bytes)) // Output the full JSON
 	}
 
 	configContent = strings.ReplaceAll(configContent, "\\n", "\n")
@@ -115,18 +271,22 @@ func (s *service) updateBHConfig(location string, bytes []byte) error {
 	if err == nil {
 		customLines, _ := extractCustomBuildLines(string(existingContent))
 		configContent = mergeContent(configContent, customLines)
+		if normalizeBHContent(string(existingContent)) == normalizeBHContent(configContent) {
+			s.logger.Debug(fmt.Sprintf("File %s is unchanged, skipping write", filePath))
+			return false, nil
+		}
 	}
 
 	if err := ioutil.WriteFile(filePath, []byte(configContent), 0644); err != nil {
 		s.logger.Debug(fmt.Sprintf("Failed to write to file %s: %v", filePath, err))
-		return err
+		return false, err
 	}
 
 	s.logger.Debug(fmt.Sprintf("File %s updated successfully", filePath))
-	return nil
+	return true, nil
 }
 
-func (s *service) updateBHSettings(location string, params bhconfig.Payload) error {
+func (s *service) updateBHSettings(location string, params bhconfig.Payload) (bool, error) {
 	s.logger.Debug("Start updateBHSettings")
 
 	location = cleanLocation(location)
@@ -135,7 +295,7 @@ func (s *service) updateBHSettings(location string, params bhconfig.Payload) err
 	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		s.logger.Debug(fmt.Sprintf("Failed to read settings file: %v", err))
-		return err
+		return false, err
 	}
 
 	contentStr := string(content)
@@ -144,13 +304,23 @@ func (s *service) updateBHSettings(location string, params bhconfig.Payload) err
 	gsIndex := transformGs(params.DefaultGs)
 	contentStr = updateConfigLine(contentStr, "Default Gs", fmt.Sprintf("%d", gsIndex))
 
+	if contentStr == string(content) {
+		s.logger.Debug("BH_settings.cfg is unchanged, skipping write")
+		return false, nil
+	}
+
 	if err := ioutil.WriteFile(filePath, []byte(contentStr), 0644); err != nil {
 		s.logger.Debug(fmt.Sprintf("Failed to write updated settings file: %v", err))
-		return err
+		return false, err
 	}
 
 	s.logger.Debug("BH_settings.cfg updated successfully")
-	return nil
+	return true, nil
+}
+
+func normalizeBHContent(content string) string {
+	content = strings.ReplaceAll(content, "\r\n", "\n")
+	return strings.TrimRight(content, "\n")
 }
 
 func cleanLocation(location string) string {

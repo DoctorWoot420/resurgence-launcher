@@ -30,14 +30,14 @@ func main() {
 	var (
 		debugMode    = envBool("DEBUG_MODE", true)
 		environment  = envString("ENVIRONMENT", "production")
-		buildVersion = envString("BUILD_VERSION", "v1.2.1")
+		buildVersion = envString("BUILD_VERSION", "v1.2.3")
 	)
 
 	// Set app context.
 	core.QCoreApplication_SetApplicationName("Resurgence Launcher")
 	core.QCoreApplication_SetOrganizationName("SlashdiabloResurgence")
 	core.QCoreApplication_SetOrganizationDomain("https://resurgence.slashgaming.net/")
-	core.QCoreApplication_SetApplicationVersion("1.2.1")
+	core.QCoreApplication_SetApplicationVersion("1.2.3")
 
 	// Enable high DPI scaling
 	core.QCoreApplication_SetAttribute(core.Qt__AA_EnableHighDpiScaling, true)
@@ -134,7 +134,7 @@ func main() {
 	populateGameModel(conf, gm, logger)
 
 	// Setup QML bridges with all dependencies.
-	diabloBridge := bridge.NewDiablo(d2s, fm, conf.LaunchDelay, logger)
+	diabloBridge := bridge.NewDiablo(d2s, bs, fm, conf.LaunchDelay, logger)
 	configBridge := bridge.NewConfig(cs, gm, configPath, logger)
 	ladderBridge := bridge.NewLadder(ls, lm, logger)
 	newsBridge := bridge.NewNews(ns, nm, logger)
@@ -202,6 +202,9 @@ func populateGameModel(conf *storage.Config, gm *config.GameModel, logger log.Lo
 		g.MaphackDefaultPassword = game.MaphackDefaultPassword
 		g.MaphackRuneDesign = game.MaphackRuneDesign
 		g.MaphackItemNameOption = game.MaphackItemNameOption
+		if g.MaphackItemNameOption == "" {
+			g.MaphackItemNameOption = "Default"
+		}
 		g.MaphackFilterBlocks = game.MaphackFilterBlocks
 
 		gm.AddGame(g)

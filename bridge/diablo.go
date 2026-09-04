@@ -1,6 +1,7 @@
 package bridge
 
 import (
+	"github.com/DoctorWoot420/resurgence-launcher/bhconfig"
 	"github.com/DoctorWoot420/resurgence-launcher/d2"
 	"github.com/DoctorWoot420/resurgence-launcher/log"
 	"github.com/therecipe/qt/core"
@@ -12,8 +13,9 @@ type DiabloBridge struct {
 	core.QObject
 
 	// Dependencies.
-	d2service d2.Service
-	logger    log.Logger
+	d2service       d2.Service
+	bhconfigService bhconfig.Service
+	logger          log.Logger
 
 	// Properties.
 	_ bool    `property:"patching"`
@@ -52,7 +54,18 @@ func (b *DiabloBridge) launchGame() {
 
 	// Do the work on another thread not to lock the GUI.
 	go func() {
-		err := b.d2service.Exec()
+		_, err := b.bhconfigService.SyncMaphackConfigsIfChanged(func(message string, progress float32) {
+			b.SetStatus(message)
+			b.SetPatchProgress(progress)
+			b.SetPatching(true)
+		})
+		if err != nil {
+			b.logger.Error(err)
+		}
+
+		b.SetPatching(false)
+
+		err = b.d2service.Exec()
 		if err != nil {
 			b.logger.Error(err)
 		}
@@ -60,7 +73,6 @@ func (b *DiabloBridge) launchGame() {
 		// Done launching.
 		b.SetLaunching(false)
 	}()
-
 }
 
 func (b *DiabloBridge) applyPatches() {
@@ -142,11 +154,12 @@ func (b *DiabloBridge) updateLaunchDelay(delay int) {
 }
 
 // NewDiablo returns a new Diablo bridge with all dependencies set up.
-func NewDiablo(d2s d2.Service, fm *d2.FileModel, launchDelay int, logger log.Logger) *DiabloBridge {
+func NewDiablo(d2s d2.Service, bs bhconfig.Service, fm *d2.FileModel, launchDelay int, logger log.Logger) *DiabloBridge {
 	b := NewDiabloBridge(nil)
 
 	// Set dependencies.
 	b.d2service = d2s
+	b.bhconfigService = bs
 	b.logger = logger
 
 	// Setup model.

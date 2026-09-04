@@ -133,10 +133,11 @@ Item {
 
     // updateMaphackItemNameOption will set the correct index of the item name options
     function updateMaphackItemNameOption(current) {
+        var currentOption = current.maphack_item_name_option || ""
         if(settings.availableItemNameOptions.length > 0) {
             // Find the correct index.
             for(var i = 0; i < settings.availableItemNameOptions.length; i++) {
-                if(settings.availableItemNameOptions[i].toLowerCase() == current.maphack_item_name_option.toLowerCase()) {
+                if(settings.availableItemNameOptions[i].toLowerCase() == currentOption.toLowerCase()) {
                     activeMaphackItemNameOptionIndex = i
                     maphackItemNameOption.currentIndex = i
                     return
