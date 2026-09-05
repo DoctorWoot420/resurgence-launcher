@@ -382,14 +382,8 @@ func (s *service) Patch(done chan bool) (<-chan float32, <-chan PatchState) {
 		var maphackManifests = make(map[string]*Manifest, 0)
 
 		for _, game := range conf.Games {
-			// If the user has chosen to override the maphack config with their own,
-			// we need to make sure the config is being ignored from the patch, and also
-			// when reseting the maphack patch.
-			var ignoredMaphackFiles []string
-
-			if game.OverrideBHCfg {
-				ignoredMaphackFiles = append(ignoredMaphackFiles, "BH.cfg", "BH_settings.cfg")
-			}
+			// The launcher owns BH.cfg / BH_settings.cfg after Play/Apply sync.
+			ignoredMaphackFiles := launcherManagedMaphackFiles()
 
 			// Reset the maphack versions, to avoid rogue files and duplicates.
 			err := s.resetMaphackPatch(game, ignoredMaphackFiles)
@@ -550,13 +544,9 @@ func (s *service) validateMaphackVersion(game *storage.Game, versions []string) 
 			return false, err
 		}
 
-		// If the user has chosen to override the maphack config with their own,
-		// we need to make sure the config is being ignored from the patch.
-		var ignoredMaphackFiles []string
-
-		if game.OverrideBHCfg {
-			ignoredMaphackFiles = append(ignoredMaphackFiles, "BH.cfg", "BH_settings.cfg")
-		}
+		// The launcher owns BH.cfg / BH_settings.cfg. Generated configs must
+		// not fail CRC validation or be overwritten by the stock maphack files.
+		ignoredMaphackFiles := launcherManagedMaphackFiles()
 		// This particular maphack version should be installed.
 		if game.MaphackVersion == v {
 			// Check how many files aren't up to date with maphack.
@@ -1069,6 +1059,12 @@ type PatchAction struct {
 	File     PatchFile
 	D2Path   string
 	LocalCRC string
+}
+
+// launcherManagedMaphackFiles are written by the BH generator / settings sync
+// and must not be treated as out of date or replaced by the stock maphack pack.
+func launcherManagedMaphackFiles() []string {
+	return []string{"BH.cfg", "BH_settings.cfg", "bh.cfg", "bh_settings.cfg"}
 }
 
 // NewService returns a service with all the dependencies.

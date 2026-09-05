@@ -1,5 +1,7 @@
 package storage
 
+import "encoding/json"
+
 // DefaultLaunchDelay is used if a launch delay hasn't been set by a user.
 const DefaultLaunchDelay = 1000
 
@@ -24,4 +26,42 @@ type Game struct {
 	MaphackRuneDesign      string   `json:"maphack_rune_design"`
 	MaphackItemNameOption  string   `json:"maphack_item_name_option"`
 	MaphackFilterBlocks    []string `json:"maphack_filter_blocks"`
+}
+
+// UnmarshalJSON accepts both launcher keys (maphack_*) and generator payload keys
+// (item_name_option, rune_design, etc.) so a hand-edited config still loads.
+func (g *Game) UnmarshalJSON(data []byte) error {
+	type rawGame Game
+	aux := struct {
+		rawGame
+		ItemNameOption  string   `json:"item_name_option"`
+		RuneDesign      string   `json:"rune_design"`
+		FilterBlocks    []string `json:"filter_blocks"`
+		DefaultGs       string   `json:"default_gs"`
+		DefaultGameName string   `json:"default_game_name"`
+		DefaultPassword string   `json:"default_password"`
+	}{}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	*g = Game(aux.rawGame)
+	if g.MaphackItemNameOption == "" && aux.ItemNameOption != "" {
+		g.MaphackItemNameOption = aux.ItemNameOption
+	}
+	if g.MaphackRuneDesign == "" && aux.RuneDesign != "" {
+		g.MaphackRuneDesign = aux.RuneDesign
+	}
+	if len(g.MaphackFilterBlocks) == 0 && len(aux.FilterBlocks) > 0 {
+		g.MaphackFilterBlocks = aux.FilterBlocks
+	}
+	if g.MaphackDefaultGs == "" && aux.DefaultGs != "" {
+		g.MaphackDefaultGs = aux.DefaultGs
+	}
+	if g.MaphackDefaultGameName == "" && aux.DefaultGameName != "" {
+		g.MaphackDefaultGameName = aux.DefaultGameName
+	}
+	if g.MaphackDefaultPassword == "" && aux.DefaultPassword != "" {
+		g.MaphackDefaultPassword = aux.DefaultPassword
+	}
+	return nil
 }

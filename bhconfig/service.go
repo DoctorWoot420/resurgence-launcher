@@ -18,7 +18,10 @@ import (
 	"github.com/DoctorWoot420/resurgence-launcher/storage"
 )
 
+const syncCacheVersion = 2
+
 type bhSyncCache struct {
+	Version    int    `json:"version"`
 	ParamsHash string `json:"params_hash"`
 	SourceSHA  string `json:"source_sha"`
 }
@@ -69,6 +72,11 @@ func (s *service) SetMaphackTextData(gameIndex int) error {
 
 func (s *service) SyncMaphackConfigsIfChanged(status ProgressFunc) (bool, error) {
 	s.logger.Debug("bhconfig/service.go start SyncMaphackConfigsIfChanged")
+
+	s.configService.RestoreSavedMaphackChoices()
+	if err := s.configService.PersistGameModel(); err != nil {
+		s.logger.Debug(fmt.Sprintf("Failed to persist game model before BH sync: %v", err))
+	}
 
 	games, err := s.eligibleMaphackGames()
 	if err != nil {
@@ -162,7 +170,7 @@ func (s *service) applyGameMaphackConfig(g storage.Game, forceDownload bool, sou
 
 	paramsHash := bhCfgParamsHash(maphackConfigParams)
 	cache := readSyncCache(g.Location)
-	paramsMatch := cache.ParamsHash == paramsHash
+	paramsMatch := cache.Version == syncCacheVersion && cache.ParamsHash == paramsHash
 	sourceMatch := sourceSHA != "" && cache.SourceSHA == sourceSHA
 	if !forceDownload && localBHExists(g.Location) && paramsMatch && (sourceMatch || sourceSHA == "") {
 		s.logger.Debug("BH.cfg source and params unchanged, skipping download")
@@ -220,8 +228,13 @@ func syncCachePath(location string) string {
 }
 
 func localBHExists(location string) bool {
-	_, err := os.Stat(filepath.Join(cleanLocation(location), "bh.cfg"))
-	return err == nil
+	dir := cleanLocation(location)
+	for _, name := range []string{"BH.cfg", "bh.cfg"} {
+		if _, err := os.Stat(filepath.Join(dir, name)); err == nil {
+			return true
+		}
+	}
+	return false
 }
 
 func readSyncCache(location string) bhSyncCache {
@@ -235,7 +248,7 @@ func readSyncCache(location string) bhSyncCache {
 }
 
 func writeSyncCache(location string, paramsHash string, sourceSHA string) {
-	data, err := json.Marshal(bhSyncCache{ParamsHash: paramsHash, SourceSHA: sourceSHA})
+	data, err := json.Marshal(bhSyncCache{Version: syncCacheVersion, ParamsHash: paramsHash, SourceSHA: sourceSHA})
 	if err != nil {
 		return
 	}

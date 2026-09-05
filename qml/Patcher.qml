@@ -193,7 +193,9 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                onClicked: diablo.launchGame()
+                onClicked: {
+                    diablo.launchGame()
+                }
             }
         }
     }

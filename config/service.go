@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
+	"strings"
 	"sync"
 
 	"github.com/DoctorWoot420/resurgence-launcher/clients/resurgence"
@@ -27,6 +28,10 @@ type Service interface {
 
 	// PersistGameModel will persist the current game model to the persistent store.
 	PersistGameModel() error
+
+	// RestoreSavedMaphackChoices copies saved item-name (and similar) values from
+	// disk back into the in-memory model when the UI has reset them to Default.
+	RestoreSavedMaphackChoices()
 
 	// UpdateLaunchDelay will update the launch delay for  games in the persistent store.
 	UpdateLaunchDelay(delay int) error
@@ -215,6 +220,40 @@ func (s *service) PersistGameModel() error {
 	}
 
 	return nil
+}
+
+func isDefaultItemName(value string) bool {
+	value = strings.TrimSpace(value)
+	return value == "" || strings.EqualFold(value, "default")
+}
+
+// RestoreSavedMaphackChoices copies saved Cosmic Info (and other non-default
+// item names) from disk when the in-memory model has been reset to Default by
+// a ComboBox binding before the user actually changed it.
+func (s *service) RestoreSavedMaphackChoices() {
+	conf, err := s.store.Read()
+	if err != nil {
+		return
+	}
+
+	games := s.gameModel.Games()
+	for i := 0; i < len(games); i++ {
+		for _, stored := range conf.Games {
+			if stored.ID != games[i].ID {
+				continue
+			}
+			if isDefaultItemName(games[i].MaphackItemNameOption) && !isDefaultItemName(stored.MaphackItemNameOption) {
+				games[i].MaphackItemNameOption = stored.MaphackItemNameOption
+			}
+			if games[i].MaphackRuneDesign == "" && stored.MaphackRuneDesign != "" {
+				games[i].MaphackRuneDesign = stored.MaphackRuneDesign
+			}
+			if len(games[i].MaphackFilterBlocks) == 0 && len(stored.MaphackFilterBlocks) > 0 {
+				games[i].MaphackFilterBlocks = stored.MaphackFilterBlocks
+			}
+			break
+		}
+	}
 }
 
 // UpdateLaunchDelay will update the Diablo launch delay in the store.

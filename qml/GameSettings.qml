@@ -14,6 +14,7 @@ Item {
     property string activeMaphackDefaultPassword: ""
     property int activeMaphackRuneDesignIndex: 0
     property int activeMaphackItemNameOptionIndex: 0
+    property bool suppressGameModelUpdates: false
     property int boxHeight: 58
 
     function setGame(current) {
@@ -134,20 +135,25 @@ Item {
     // updateMaphackItemNameOption will set the correct index of the item name options
     function updateMaphackItemNameOption(current) {
         var currentOption = current.maphack_item_name_option || ""
+        suppressGameModelUpdates = true
         if(settings.availableItemNameOptions.length > 0) {
             // Find the correct index.
             for(var i = 0; i < settings.availableItemNameOptions.length; i++) {
                 if(settings.availableItemNameOptions[i].toLowerCase() == currentOption.toLowerCase()) {
                     activeMaphackItemNameOptionIndex = i
                     maphackItemNameOption.currentIndex = i
+                    suppressGameModelUpdates = false
                     return
                 }
             }
         }
 
-        // Default to first index in list.
-        activeMaphackItemNameOptionIndex = 0
-        maphackItemNameOption.currentIndex = 0
+        // Unknown saved value: fall back to the first option once the list is loaded.
+        if(settings.availableItemNameOptions.length > 0) {
+            activeMaphackItemNameOptionIndex = 0
+            maphackItemNameOption.currentIndex = 0
+        }
+        suppressGameModelUpdates = false
     }
 
     // updateMaphackFilterBlocks will set the correct values of the filter blocks
@@ -233,7 +239,18 @@ Item {
     }
 
     function updateGameModel() {
-        if(game != undefined) {
+        if(suppressGameModelUpdates) {
+            return
+        }
+        if(game != undefined && game.id) {
+            var itemName = maphackItemNameOption.currentText
+            if(!itemName && game.maphack_item_name_option) {
+                itemName = game.maphack_item_name_option
+            }
+            var runeDesign = maphackRuneDesign.currentText
+            if(!runeDesign && game.maphack_rune_design) {
+                runeDesign = game.maphack_rune_design
+            }
             var body = {
                 id: game.id,
                 location: d2pathInput.text,
@@ -244,12 +261,21 @@ Item {
                 maphack_default_gs: maphackDefaultGs.currentText,
                 maphack_default_game_name: maphackDefaultGameName.text,
                 maphack_default_password: maphackDefaultPassword.text,
-                maphack_rune_design: maphackRuneDesign.currentText,
-                maphack_item_name_option: maphackItemNameOption.currentText,
+                maphack_rune_design: runeDesign,
+                maphack_item_name_option: itemName,
                 maphack_filter_blocks: makeBlockList(),
             }
             
             settings.upsertGame(JSON.stringify(body))
+        }
+    }
+
+    Connections {
+        target: settings
+        onAvailableItemNameOptionsChanged: {
+            if(game && game.id) {
+                updateMaphackItemNameOption(game)
+            }
         }
     }
 
@@ -769,7 +795,11 @@ Item {
                                         height: 30
                                         width: 140
 
-                                        onActivated: updateGameModel()
+                                        onActivated: {
+                                            if(!suppressGameModelUpdates) {
+                                                updateGameModel()
+                                            }
+                                        }
                                     }
                                 } 
                             }
